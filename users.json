@@ -1,16 +1,1 @@
-[
-  {
-    "username": "airzz",
-    "password": "$2b$10$TNP/OeoR.3ps4ewA3UZZfegKyMdRO9YZgBB//zFyXGkpEiv8MYgke",
-    "lastUpdated": "2024-11-04T12:45:57.804Z",
-    "role": "moderator",
-    "isOnline": false
-  },
-  {
-    "username": "1",
-    "password": "$2b$10$WnYTE7xFI7L1dwOI6LTgFeWd4wtOiqMaJ1J/oaxcSIPxZeuDfblSW",
-    "lastUpdated": "2024-11-05T04:01:05.021Z",
-    "role": "admin",
-    "isOnline": true
-  }
-]
+[]
