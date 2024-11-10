@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Fusion Network - Minecraft Server</title>
+    <link rel="icon" type="icon/x-icon" href="img/logo.webp" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary: #a78bfa;
+            --secondary: #4ade80;
+            --background: #111827;
+            --surface: #1f2937;
+            --text: #e5e7eb;
+            --text-secondary: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('bg.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        header {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInDown 0.6s ease-out forwards;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background-color: rgba(167, 139, 250, 0.1);
+        }
+
+        .burger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        main {
+            padding: 2rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        .ip-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .ip-box {
+            background-color: rgba(17, 24, 39, 0.8);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+
+        .copy-btn {
+            background-color: rgba(167, 139, 250, 0.2);
+            border: none;
+            color: var(--primary);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: rgba(167, 139, 250, 0.3);
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .command {
+            background-color: rgba(17, 24, 39, 0.8);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 1.2rem;
+            color: var(--text);
+            margin: 1rem 0;
+            display: inline-block;
+        }
+
+        footer {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 4rem;
+            border-radius: 1rem 1rem 0 0;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 1.2s forwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(31, 41, 55, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 4rem 1rem 1rem;
+                z-index: 1000;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .burger {
+                display: block;
+                position: relative;
+                z-index: 1001;
+            }
+
+            .ip-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="#" class="logo">
+                    <img src="img/logo.webp" alt="Fusion Network Logo" style="width: 30px; height: 30px;">
+                    Fusion Network
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <a href="index.html">Home</a>
+                    <a href="/forums">Forums</a>
+                    <a href="/apply-staff">Staff Apply</a>
+                    <a href="/notices">Notices</a>
+                    <a href="/profilepage.html">
+                        <img src="https://mc-heads.net/avatar/steve/24" alt="Steve Head" style="width: 24px; height: 24px; border-radius: 4px; vertical-align: middle; margin-right: 5px;">
+                        Profile
+                    </a>
+                </div>
+                <button class="burger" id="burger" aria-label="Toggle menu">☰</button>
+            </nav>
+        </header>
+
+        <main>
+            <section class="section">
+                <h1>Join the Fusion Network Minecraft Server</h1>
+                <p>Welcome to Fusion Network! Follow these steps to join our amazing Minecraft community.</p>
+            </section>
+
+            <section class="section">
+                <h2>How to Connect</h2>
+                <p>To join our server, add the following IP address to your Minecraft server list:</p>
+                <div class="ip-container">
+                    <div class="ip-box" id="serverIP">fusion-network.xyz</div>
+                    <button class="copy-btn" id="copyBtn" aria-label="Copy server IP">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                </div>
+                <p>You can connect using either the cracked version of Minecraft or a Premium Account.</p>
+            </section>
+
+            <section class="section">
+                <h2>Getting Started</h2>
+                <p>When you first join the server, you'll be prompted to choose between <strong>Premium</strong> or <strong>Cracked</strong>:</p>
+                <ul>
+                    <li><strong>Premium:</strong> Simply select "Premium" and rejoin the server to continue. (If you select premium you can bypass the login system every time)</li>
+                    <li><strong>Cracked:</strong> If you select "Cracked," you'll need to register using the following command in chat:</li>
+                </ul>
+                <div class="command">
+                    /register &lt;password&gt; &lt;password&gt;
+                </div>
+                <p>Replace <code>&lt;password&gt;</code> with your desired password. You'll use this password to log in whenever you join the server.</p>
+            </section>
+
+            <section class="section">
+                <h2>Need Help?</h2>
+                <p>
+                    If you forget your password or need to change it, please view the 
+                    <a href="https://discord.gg/fusion-network-893030510073348146" style="color: var(--primary); text-decoration: none;">Discord</a> 
+                    or the <a href="help.html" style="color: var(--primary); text-decoration: none;">help documentation</a>. 
+                    We're here to help!
+                </p>
+                
+            </section>
+
+            <section class="section">
+                <h2>Enjoy Your Adventure!</h2>
+                <p>Welcome to the Fusion Network! We hope you have an amazing time exploring our server and meeting new friends. If you have any questions, don't hesitate to ask in the game chat or on our Discord server.</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Fusion Network. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Navigation menu toggle
+        const burger = document.getElementById('burger');
+        const navLinks = document.getElementById('navLinks');
+        const mainContent = document.querySelector('main');
+
+        burger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            document.body.classList.toggle('menu-open');
+            burger.textContent = navLinks.classList.contains('show') ? '✕' : '☰';
+            
+            if (navLinks.classList.contains('show')) {
+                setTimeout(() => {
+                    mainContent.style.visibility = 'hidden';
+                }, 300);
+            } else {
+                mainContent.style.visibility = 'visible';
+            }
+        });
+
+        // Copy IP functionality
+        const copyBtn = document.getElementById('copyBtn');
+        const serverIP = document.getElementById('serverIP');
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(serverIP.textContent).then(() => {
+                copyBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
