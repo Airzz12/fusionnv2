@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Fusion Network</title>
+    <link rel="icon" type="icon/x-icon" href="img/logo.webp" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary: #a78bfa;
+            --secondary: #4ade80;
+            --background: #111827;
+            --surface: #1f2937;
+            --text: #e5e7eb;
+            --text-secondary: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('bg.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        header {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInDown 0.6s ease-out forwards;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background-color: rgba(167, 139, 250, 0.1);
+        }
+
+        main {
+            padding: 2rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: scaleIn 0.6s ease-out 0.3s forwards;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        .section {
+            background-color: rgba(31, 41, 55, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out 0.9s forwards;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: var(--background);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--text-secondary);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 100%;
+            color: var(--text);
+        }
+
+        .close {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--text);
+        }
+        
+.burger {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(31, 41, 55, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 4rem 1rem 1rem;
+        z-index: 1000;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .burger {
+        display: block;
+        position: relative;
+        z-index: 1001;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="/home" class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                        <polyline points="2 17 12 22 22 17"></polyline>
+                        <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                    Fusion Network Admin
+                </a>
+                <div class="nav-links">
+                    <a href="/home">Home</a>
+                    <a href="#" class="active">Admin Panel</a>
+                    <a href="/logout">Logout</a>
+                </div>
+                <button class="burger" id="burger" aria-label="Toggle menu">☰</button>
+            </nav>
+        </header>
+
+        <main>
+            <section class="section">
+                <h2>Welcome, <span id="username"><%= user %></span>!</h2>
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <img src="https://mc-heads.net/avatar/steve/100" alt="User Avatar" style="border-radius: 50%; width: 100px; height: 100px;">
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Timeout User from Forums</h2>
+                <form method="POST" action="/timeout-user" onsubmit="showTimeoutModal(event)">
+                    <input type="text" name="username" placeholder="Username to Timeout" required />
+                    <input type="number" name="timeoutDuration" placeholder="Timeout Duration" required min="1" />
+                    <select name="timeUnit" required>
+                        <option value="minutes">Minutes</option>
+                        <option value="hours">Hours</option>
+                        <option value="days">Days</option>
+                    </select>
+                    <button type="submit" class="btn">Timeout User</button>
+                </form>
+            </section>
+
+            <section class="section">
+                <h2>Remove User Timeout</h2>
+                <form method="POST" action="/remove-timeout" onsubmit="showRemoveTimeoutModal(event)">
+                    <input type="text" name="username" placeholder="Username to Remove Timeout" required />
+                    <button type="submit" class="btn">Remove Timeout</button>
+                </form>
+            </section>
+
+            <section class="section">
+                <h2>Promote User to Role</h2>
+                <form method="POST" action="/promote-user">
+                    <input type="text" name="username" placeholder="Username to Promote" required />
+                    <select name="role" required>
+                        <option value="admin">Admin</option>
+                        <option value="moderator">Moderator</option>
+                        <option value="Soul">Soul</option>
+                        <option value="Lifesteal Knight">Lifesteal Knight</option>
+                        <option value="Sentinel">Sentinel</option>
+                        <option value="Master">Master</option>
+                        <option value="Mercenary">Mercenary</option>
+                        <option value="Fusion">Fusion</option>
+                        <option value="user">User</option>
+                    </select>
+                    <button type="submit" class="btn">Promote</button>
+                </form>
+            </section>
+
+            <section class="section">
+                <h2>Demote User</h2>
+                <form method="POST" action="/demote-user">
+                    <input type="text" name="username" placeholder="Username to Demote" required />
+                    <button type="submit" class="btn">Demote</button>
+                </form>
+            </section>
+
+            <section class="section">
+                <h2>Staff Applications</h2>
+                <button class="btn" onclick="handleStaffApplicationAction('/close-staff-applications', 'Staff applications closed successfully!')">Close Staff Applications</button>
+                <button id="open-applications" class="btn" onclick="handleStaffApplicationAction('/open-staff-applications', 'Staff applications opened successfully!')">Open Staff Applications</button>
+                <button id="reset-applications" class="btn" onclick="handleStaffApplicationAction('/reset-staff-applications', 'Staff applications reset successfully!')">Reset Staff Applications</button>
+                <button class="btn" onclick="window.location.href='/admin-applications'">View Staff Applications</button>
+            </section>
+
+            <section class="section">
+                <h2>User Actions</h2>
+                <button id="open-reset-password-modal" class="btn">Reset Password</button>
+                <form action="/logout" method="get">
+                    <button type="submit" class="btn">Logout</button>
+                </form>
+                
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="timeoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('timeoutModal')">&times;</span>
+            <p id="timeoutMessage"></p>
+        </div>
+    </div>
+
+    <div id="removeTimeoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('removeTimeoutModal')">&times;</span>
+            <p>User timeout has been removed.</p>
+        </div>
+    </div>
+
+    <div id="resetPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('resetPasswordModal')">&times;</span>
+            <h2>Reset User Password</h2>
+            <form action="/reset-password" method="POST">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="newPassword" placeholder="New Password" required>
+                <input type="password" name="confirmNewPassword" placeholder="Confirm New Password" required>
+                <button type="submit" class="btn">Reset Password</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showTimeoutModal(event) {
+            event.preventDefault();
+            const form = event.target;
+            const username = form.username.value;
+            const duration = form.timeoutDuration.value;
+            const unit = form.timeUnit.value;
+            
+            document.getElementById('timeoutMessage').textContent = `${username} has been timed out for ${duration} ${unit}.`;
+            document.getElementById('timeoutModal').style.display = 'flex';
+            
+            form.submit();
+        }
+
+        function showRemoveTimeoutModal(event) {
+            event.preventDefault();
+            document.getElementById('removeTimeoutModal').style.display = 'flex';
+            
+            event.target.submit();
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function handleStaffApplicationAction(url, successMessage) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(successMessage);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an issue with the request. Please try again.');
+            });
+        }
+
+        document.getElementById('open-reset-password-modal').addEventListener('click', function() {
+            document.getElementById('resetPasswordModal').style.display = 'flex';
+        });
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        };
+
+         </script>
+
+</body>
+</html>

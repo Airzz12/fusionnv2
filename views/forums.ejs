@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forums - Fusion Network</title>
+    <link rel="icon" type="icon/x-icon" href="img/logo.webp" />
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #a78bfa;
+            --secondary: #4ade80;
+            --background: #111827;
+            --surface: #1f2937;
+            --text: #e5e7eb;
+            --text-secondary: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('bg.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        header {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background-color: rgba(167, 139, 250, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        .forum-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .forum-box {
+            background-color: rgba(31, 41, 55, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .forum-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .forum-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            margin-right: 10px;
+            border: 2px solid var(--primary);
+            transition: transform 0.2s;
+        }
+
+        .forum-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .forum-user-info {
+            flex: 1;
+        }
+
+        .forum-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .forum-description {
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+
+        .forum-actions {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .forum-actions button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .view-replies-btn {
+            background-color: var(--secondary);
+            color: var(--background);
+        }
+
+        .edit-btn, .delete-btn {
+            opacity: 0;
+            position: absolute;
+            right: 20px;
+            transition: opacity 0.3s ease;
+        }
+
+        .edit-btn {
+            background-color: var(--primary);
+            color: var(--background);
+            top: 20px;
+        }
+
+        .delete-btn {
+            background-color: #ef4444;
+            color: white;
+            top: 60px;
+        }
+
+        .forum-box:hover .edit-btn,
+        .forum-box:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .forum-box {
+            position: relative;
+        }
+
+        .replies {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--text-secondary);
+        }
+
+        .reply-box {
+            display: flex;
+            align-items: start;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: rgba(31, 41, 55, 0.4);
+            border-radius: 8px;
+        }
+
+        .reply-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            margin-right: 8px;
+        }
+
+        .reply-content {
+            flex: 1;
+        }
+
+        .create-forum-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: var(--background);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--surface);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .close-modal {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: var(--text);
+        }
+
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid var(--text-secondary);
+            background-color: var(--background);
+            color: var(--text);
+        }
+
+        .modal-content button {
+            background-color: var(--primary);
+            color: var(--background);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .reply-form {
+            margin-top: 10px;
+        }
+
+        .reply-form textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--text-secondary);
+            background-color: var(--background);
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .reply-form button {
+            background-color: var(--primary);
+            color: var(--background);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .load-more {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: var(--secondary);
+            color: var(--background);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.pagination a {
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 2px solid #e2e8f0;
+  border-radius: 9999px;
+  color: #4a5568;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+}
+
+.pagination a.active {
+  background-color: #4299e1;
+  color: #ffffff;
+  border-color: #4299e1;
+  box-shadow: 0 4px 6px rgba(66, 153, 225, 0.25);
+}
+
+.pagination a:hover {
+  background-color: #ebf8ff;
+  color: #2b6cb0;
+  border-color: #4299e1;
+}
+
+.pagination a:not(.active):hover {
+  transform: translateY(-2px);
+}
+
+.burger {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(31, 41, 55, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 4rem 1rem 1rem;
+        z-index: 1000;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .burger {
+        display: block;
+        position: relative;
+        z-index: 1001;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="/home" class="logo">
+                    <img src="img/logo.webp" alt="Fusion Network Logo" style="width: 30px; height: 30px;">
+                    Fusion Network
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <a href="/home">Home</a>
+                    <a href="/forums" class="active">Forums</a>
+                    <a href="/apply-staff">Staff Apply</a>
+                    <a href="/notices">Notices</a>
+                    <a href="/profilepage" class="">
+                        <img src="https://mc-heads.net/avatar/steve/24" alt="Steve Head" style="width: 24px; height: 24px; border-radius: 4px; vertical-align: middle; margin-right: 5px;">
+                        Profile
+                    </a>
+                </div>
+                <button class="burger" id="burger" aria-label="Toggle menu">☰</button>
+            </nav>
+        </header>
+
+        <main>
+            <h1>Forums</h1>
+
+            <% if (role) { %>
+                <button onclick="showModal()" class="create-forum-btn">Create New Forum</button>
+            <% } else { %>
+                <p style="text-align: center; color: var(--text-secondary);">You must be logged in to create a forum.</p>
+            <% } %>
+
+            <div class="forum-container">
+                <% 
+                const minecraftUsers = ['Notch', 'Jeb_', 'Dinnerbone', 'Grumm', 'Xlson', 'Searge', 'Grum', 'MHF_Steve'];
+                let avatarIndex = 0;
+                %>
+                
+                <% forums.forEach(forum => { %>
+                    <div class="forum-box">
+                        <div class="forum-header">
+                            <img src="https://mc-heads.net/avatar/<%= minecraftUsers[avatarIndex % minecraftUsers.length] %>/100" 
+                                 alt="<%= forum.username %>'s avatar"
+                                 class="forum-avatar">
+                            <div class="forum-user-info">
+                                <p class="forum-user">
+                                    <% if (forum.rank === 'admin') { %>
+                                        <span style="color: red;">[Admin]</span>
+                                    <% } else if (forum.rank === 'moderator') { %>
+                                        <span style="color: orange;">[Moderator]</span>
+                                    <% } else if (['Soul', 'Lifesteal Knight', 'Sentinel', 'Master', 'Mercenary', 'Fusion'].includes(forum.rank)) { %>
+                                        <span style="color: green;">[<%= forum.rank %>]</span>
+                                    <% } else { %>
+                                        <span style="color: grey;">[User]</span>
+                                    <% } %>
+                                    <%= forum.username %>
+                                </p>
+                            </div>
+                        </div>
+                        <h3 class="forum-title"><%= forum.title %></h3>
+                        <p class="forum-description"><%= forum.description %></p>
+
+                        <div class="forum-actions">
+                            <button onclick="toggleReplies('<%= forum.id %>')" class="view-replies-btn">
+                                <i class="fas fa-comments"></i> View Replies
+                            </button>
+                            <% if (forum.username === user || role === 'admin' || role === 'moderator') { %>
+                                <button onclick="editForum('<%= forum.id %>', '<%= forum.title %>', '<%= forum.description %>')" class="edit-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteForum('<%= forum.id %>')" class="delete-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            <% } %>
+                        </div>
+
+                        <div id="replies-<%= forum.id %>" class="replies" style="display: none;">
+                            <% if (forum.replies && forum.replies.length > 0) { %>
+                                <h4>Replies:</h4>
+                                <% forum.replies.forEach((reply, replyIndex) => { %>
+                                    <div class="reply-box">
+                                        <img src="https://mc-heads.net/avatar/<%= minecraftUsers[(avatarIndex + replyIndex + 1) % minecraftUsers.length] %>/100" 
+                                             alt="<%= reply.username %>'s avatar"
+                                             class="reply-avatar">
+                                        <div class="reply-content">
+                                            <p><strong><%= reply.username %>:</strong> <%= reply.text %></p>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            <% } else { %>
+                                <p>No replies yet.</p>
+                            <% } %>
+                            <div class="reply-form">
+                                <form action="/reply-to-forum/<%= forum.id %>" method="POST">
+                                    <textarea name="replyText" placeholder="Write your reply..." required></textarea>
+                                    <button type="submit">Post Reply</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <% avatarIndex++; %>
+                <% 
+                 }); %>
+            </div>
+            <div class="pagination">
+                <% if (currentPage > 1) { %>
+                    <a href="/forums?page=<%= currentPage - 1 %>" class="pagination-prev">Previous</a>
+                <% } %>
+            
+                <!-- Page Numbers -->
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="/forums?page=<%= i %>" 
+                       class="pagination-page <%= i === currentPage ? 'active' : '' %>">
+                       <%= i %>
+                    </a>
+                <% } %>
+            
+                <% if (currentPage < totalPages) { %>
+                    <a href="/forums?page=<%= currentPage + 1 %>" class="pagination-next">Next</a>
+                <% } %>
+            </div>
+        </main>
+    </div>
+
+    <div id="createForumModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2>Create New Forum</h2>
+            <form action="/create-forum" method="POST">
+                <input type="text" name="title" placeholder="Title" required>
+                <textarea name="description" placeholder="Description" required></textarea>
+                <button type="submit">Create Forum</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="editForumModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Forum Post</h2>
+            <form id="editForumForm" method="POST">
+                <input type="text" id="editTitle" name="title" placeholder="Title" required>
+                <textarea id="editDescription" name="description" placeholder="Description" required></textarea>
+                <button type="submit">Update Forum</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showModal() {
+            document.getElementById('createForumModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('createForumModal').style.display = 'none';
+        }
+
+        function toggleReplies(forumId) {
+            const repliesSection = document.getElementById(`replies-${forumId}`);
+            repliesSection.style.display = repliesSection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function editForum(id, title, description) {
+            const modal = document.getElementById('editForumModal');
+            const titleInput = document.getElementById('editTitle');
+            const descriptionInput = document.getElementById('editDescription');
+            const formAction = document.getElementById('editForumForm');
+            
+            titleInput.value = title;
+            descriptionInput.value = description;
+            formAction.action = `/edit-forum/${id}`;
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editForumModal').style.display = 'none';
+        }
+
+        function deleteForum(id) {
+            if (confirm('Are you sure you want to delete this forum?')) {
+                fetch(`/delete-forum/${id}`, { method: 'DELETE' })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('Failed to delete the forum');
+                        }
+                    });
+            }
+        }
+
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            // Implement load more functionality here
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const createModal = document.getElementById('createForumModal');
+            const editModal = document.getElementById('editForumModal');
+            if (event.target == createModal) {
+                createModal.style.display = "none";
+            }
+            if (event.target == editModal) {
+                editModal.style.display = "none";
+            }
+        }
+
+        document.querySelectorAll('.pagination-link').forEach(link => {
+    link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const page = this.getAttribute('href').split('=')[1];
+        fetchPosts(page);
+    });
+});
+
+function fetchPosts(page) {
+    // Fetch posts for the selected page from your server
+    fetch(`/forums?page=${page}`)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('.forum-container').innerHTML = html;
+            document.querySelectorAll('.pagination-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`.pagination-link[href="?page=${page}"]`).classList.add('active');
+        });
+}
+    </script>
+    <script>
+               const burger = document.getElementById('burger');
+        const navLinks = document.getElementById('navLinks');
+        const mainContent = document.querySelector('main');
+
+        burger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            document.body.classList.toggle('menu-open');
+            burger.textContent = navLinks.classList.contains('show') ? '✕' : '☰';
+            
+            if (navLinks.classList.contains('show')) {
+                setTimeout(() => {
+                    mainContent.style.visibility = 'hidden';
+                }, 300);
+            } else {
+                mainContent.style.visibility = 'visible';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+   </script>
+
+</body>
+</html>

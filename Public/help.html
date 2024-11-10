@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - Fusion Network Minecraft Server</title>
+    <link rel="icon" type="icon/x-icon" href="img/logo.webp" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary: #a78bfa;
+            --secondary: #4ade80;
+            --background: #111827;
+            --surface: #1f2937;
+            --text: #e5e7eb;
+            --text-secondary: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('bg.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        header {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInDown 0.6s ease-out forwards;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background-color: rgba(167, 139, 250, 0.1);
+        }
+
+        .burger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        main {
+            padding: 2rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h2::after {
+            content: '\25BC';
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        h2.active::after {
+            transform: rotate(-180deg);
+        }
+
+        .problem-content {
+            display: none;
+            padding: 1rem;
+            background-color: rgba(31, 41, 55, 0.5);
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .problem-content.active {
+            display: block;
+        }
+
+        footer {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 4rem;
+            border-radius: 1rem 1rem 0 0;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 1.2s forwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(31, 41, 55, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 4rem 1rem 1rem;
+                z-index: 1000;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .burger {
+                display: block;
+                position: relative;
+                z-index: 1001;
+            }
+        }
+
+        /* New styles for search bar */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            font-size: 1rem;
+            border: 2px solid var(--primary);
+            border-radius: 9999px;
+            background-color: rgba(31, 41, 55, 0.8);
+            color: var(--text);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="/home" class="logo">
+                    <img src="img/logo.webp" alt="Fusion Network Logo" style="width: 30px; height: 30px;">
+                    Fusion Network
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <a href="/home">Home</a>
+                    <a href="/forums">Forums</a>
+                    <a href="/apply-staff">Staff Apply</a>
+                    <a href="/notices">Notices</a>
+                    <a href="/profilepage"class="active">
+                        <img src="https://mc-heads.net/avatar/steve/24" alt="Steve Head" style="width: 24px; height: 24px; border-radius: 4px; vertical-align: middle; margin-right: 5px;">
+                        Profile
+                    </a>
+                </div>
+                <button class="burger" id="burger" aria-label="Toggle menu">☰</button>
+            </nav>
+        </header>
+
+        <main>
+            <section class="section">
+                <h1>Help Center</h1>
+                <p>Welcome to the Fusion Network Help Center. Here you can find solutions to common problems. Click on a problem to see its solution. If you dont find a soloution please refer to the discord and create a support ticket</p>
+            </section>
+
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input type="text" class="search-bar" id="searchInput" placeholder="Search for a problem...">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+            </div>
+
+            <script>
+function searchProblems() {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const headers = document.querySelectorAll('.section h2');
+    let found = false;
+
+    headers.forEach(header => {
+        const section = header.closest('.section');
+        const title = header.innerText.toLowerCase();
+
+        if (title.includes(input)) {
+            section.style.display = 'block';
+            found = true;
+        } else {
+            section.style.display = 'none';
+        }
+    });
+
+    const noResultsMessage = document.getElementById('noResultsMessage');
+    if (!found) {
+        if (!noResultsMessage) {
+            const message = document.createElement('p');
+            message.id = 'noResultsMessage';
+            message.textContent = 'No results found. Please report at the discord under a ticket';
+            message.style.textAlign = 'center';
+            message.style.marginTop = '20px';
+            message.style.color = 'var(--text)';
+            document.querySelector('main').appendChild(message);
+        }
+    } else if (noResultsMessage) {
+        noResultsMessage.remove();
+    }
+}
+
+document.getElementById('searchInput').addEventListener('input', searchProblems);
+
+            </script>
+
+            <section class="section" id="error-netsock">
+                <h2>Error Netsock Connection</h2>
+                <div class="problem-content">
+                    <p>The "Error Netsock Connection" usually occurs when there's an issue with your network connection to our server. Here are some steps to resolve this:</p>
+                    <ol>
+                        <li>Check your internet connection and ensure it's stable.</li>
+                        <li>Verify that you're using the correct server address: fusion-network.xyz or as.fusion-network.xyz</li>
+                        <li>Disable any VPN or proxy services you might be using.</li>
+                        <li>Restart your Minecraft client and try connecting again.</li>
+                        <li>If the problem persists, try restarting your router.</li>
+                        <li>Try joining with a different version of Minecraft suggested 1.21.1</li>
+                    </ol>
+                    <p>If none of these steps work, please contact our support team on Discord for further assistance.</p>
+                </div>
+            </section>
+
+            <section class="section" id="unable-to-join">
+                <h2>Unable to Join Server</h2>
+                <div class="problem-content">
+                    <p>If you're having trouble joining the server, try these steps:</p>
+                    <ol>
+                        <li>Ensure you're using the correct Minecraft version (1.20.1).</li>
+                        <li>Check if the server is currently under maintenance.</li>
+                        <li>Verify your internet connection is stable.</li>
+                        <li>Try restarting your Minecraft client.</li>
+                    </ol>
+                    <p>If you still can't join, please report this issue on our Discord server.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Forgot Password</h2>
+                <div class="problem-content">
+                    <p>If you've forgotten your password, follow these steps:</p>
+                    <ol>
+                        <li>Join our Discord server.</li>
+                        <li>Open a support ticket in the #support channel.</li>
+                        <li>Provide your Minecraft username and any proof of ownership.</li>
+                        <li>A staff member will assist you with resetting your password.</li>
+                    </ol>
+                    <p>Please note that for security reasons, we cannot reset passwords via email or in-game chat.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Lag or Performance Issues</h2>
+                <div class="problem-content">
+                    <p>If you're experiencing lag or performance issues, try these solutions:</p>
+                    <ol>
+                        <li>Lower your render distance in Minecraft settings.</li>
+                        <li>Close other applications running in the background.</li>
+                        <li>Ensure your computer meets the minimum system requirements.</li>
+                        <li>Try connecting via a wired internet connection if possible.</li>
+                    </ol>
+                    <p>If issues persist, please report them on our Discord server with details about your system specifications.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Other Issues</h2>
+                <div class="problem-content">
+                    <p>If you're experiencing a problem not listed here, please follow these steps:</p>
+                    <ol>
+                        <li>Check our Discord server's #announcements channel for any known issues.</li>
+                        <li>Search the #faq channel on Discord for similar problems and solutions.</li>
+                        <li>If you can't find a solution, open a support ticket in the #support channel.</li>
+                        <li>Provide as much detail as possible about the issue you're facing.</li>
+                    </ol>
+                    <p>Our staff will do their best to assist you as quickly as possible.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Lag or Ping Issues</h2>
+                <div class="problem-content">
+                    <p>If you're experiencing high ping or lag in the server, try these steps:</p>
+                    <ol>
+                        <li>Check your internet connection to ensure it's stable.</li>
+                        <li>Use a wired connection for better stability, if possible.</li>
+                        <li>Make sure you're connecting to the correct server region.</li>
+                        <li>Use tools like <a href="https://www.speedtest.net" target="_blank">Speedtest.net</a> to check your ping and download speed.</li>
+                        <li>If your ping is high, try restarting your router and reconnecting to the server.</li>
+                        <li>Make sure no other applications or devices are using excessive bandwidth on your network.</li>
+                        <li>Try connecting to the server during off-peak hours for a better experience.</li>
+                    </ol>
+                    <p>If the issue persists, please report it to our support team on Discord with your ping details.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Server Crashes or Disconnects</h2>
+                <div class="problem-content">
+                    <p>If the server crashes or disconnects unexpectedly, try the following:</p>
+                    <ol>
+                        <li>Check if the server is under maintenance or if there are any scheduled restarts.</li>
+                        <li>Verify that you're connected to a stable internet connection.</li>
+                        <li>Ensure that your Minecraft client is updated to the latest version.</li>
+                        <li>Restart your Minecraft client and try reconnecting.</li>
+                        <li>Try connecting to a different server region if the issue persists.</li>
+                        <li>If you're experiencing a crash on your own client, check your Minecraft logs for error messages that may point to specific issues, such as mods or corrupted files.</li>
+                        <li>If the problem continues for multiple players, it may be a server-side issue. In this case, please report the issue on our Discord server.</li>
+                    </ol>
+                    <p>If the issue isn't resolved by the above steps, please reach out to our support team for further assistance.</p>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>Authentication Errors</h2>
+                <div class="problem-content">
+                    <p>If you're encountering authentication errors when trying to log in, follow these steps:</p>
+                    <ol>
+                        <li>Ensure you're using a valid and licensed version of Minecraft.</li>
+                        <li>Check if your Minecraft account is correctly linked to your Mojang or Microsoft account.</li>
+                        <li>If you see an error like "Invalid Session," log out of your Minecraft account and log back in.</li>
+                        <li>Check if Mojang or Microsoft servers are experiencing outages by visiting their official status pages.</li>
+                        <li>If you're using a premium Minecraft account, make sure that your account is not expired or banned.</li>
+                        <li>If you're still having trouble, try restarting your Minecraft client and your computer.</li>
+                        <li>If the error persists, contact support for help with your authentication issue.</li>
+                    </ol>
+                    <p>For any account-related issues, please contact Mojang or Microsoft support, or reach out to our team on Discord for further guidance.</p>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>Unable to Connect to Multiplayer</h2>
+                <div class="problem-content">
+                    <p>If you're unable to connect to a multiplayer server, follow these steps:</p>
+                    <ol>
+                        <li>Make sure you are using the correct server address. Double-check the server's IP and port number.</li>
+                        <li>Ensure your internet connection is stable and there are no network issues on your end.</li>
+                        <li>Check if the server you're trying to join is online and not in maintenance. You can often check this via the server's website or Discord.</li>
+                        <li>If you're using a firewall or antivirus software, ensure that it is not blocking Minecraft or the server's connection.</li>
+                        <li>Try disabling any VPN or proxy services that may be interfering with your connection.</li>
+                        <li>If you're connecting through a local network, try using a direct LAN connection or check for any restrictions in your router settings.</li>
+                        <li>Restart your Minecraft client and try connecting again.</li>
+                    </ol>
+                    <p>If you continue to have issues, try contacting the server administrators for more help.</p>
+                </div>
+            </section>
+            <section class="section">
+    <h2>Server Lag or High Ping</h2>
+    <div class="problem-content">
+        <p>If you're experiencing lag or high ping while playing, try these steps:</p>
+        <ol>
+            <li>Check your internet connection. A stable wired connection is recommended over Wi-Fi to reduce ping and lag.</li>
+            <li>Use a server that is geographically closer to your location for better performance.</li>
+            <li>Close any other applications or devices that are using your internet bandwidth, such as streaming videos or large downloads.</li>
+            <li>Adjust your Minecraft settings to reduce the demand on your system, such as lowering your render distance or disabling resource-intensive features.</li>
+            <li>Check the server’s performance. If many players are online or the server is undergoing heavy usage, lag may be unavoidable.</li>
+            <li>If you are the server owner, try optimizing server performance by reducing the number of plugins or mods in use, or upgrading your hosting plan.</li>
+            <li>If you're still experiencing issues, try contacting the server administrators or report the issue on Discord for further assistance.</li>
+        </ol>
+        <p>Lag can be caused by various factors, including server load, network issues, or computer performance. If the above steps don't solve the problem, consider reaching out to the support team.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Minecraft Crashes During Gameplay</h2>
+    <div class="problem-content">
+        <p>If Minecraft crashes while you're playing, follow these steps to resolve the issue:</p>
+        <ol>
+            <li>Make sure your system meets the minimum requirements for Minecraft. If your system is underpowered, the game may crash due to resource constraints.</li>
+            <li>Check for any updates to Minecraft, Java, or your graphics drivers. Outdated versions of any of these can cause crashes.</li>
+            <li>Try lowering the graphics settings in Minecraft, such as render distance or particle effects, to reduce the strain on your system.</li>
+            <li>Disable any resource packs or mods you're using, as these can sometimes cause compatibility issues with newer versions of Minecraft.</li>
+            <li>Check your system's memory usage. If your system is running out of RAM, Minecraft might crash. Try allocating more RAM to Minecraft through the Minecraft Launcher settings.</li>
+            <li>If you see an error message or crash report, try searching online for solutions or report the issue on our Discord server with the crash report attached.</li>
+        </ol>
+        <p>If the problem persists after trying these steps, consider reinstalling Minecraft or contacting the support team for more assistance.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Minecraft Audio Issues</h2>
+    <div class="problem-content">
+        <p>If you're experiencing audio issues in Minecraft, such as no sound or distorted sound, follow these troubleshooting steps:</p>
+        <ol>
+            <li>Ensure that your computer's volume is turned up and not muted.</li>
+            <li>Check the in-game sound settings in Minecraft and make sure the volume sliders are properly adjusted.</li>
+            <li>Make sure your audio output device is correctly set. If you're using headphones or external speakers, ensure they are selected as the default audio device.</li>
+            <li>Update your audio drivers to the latest version available for your system.</li>
+            <li>Try restarting Minecraft and your computer to reset any potential audio conflicts or glitches.</li>
+            <li>If you're using mods that affect sound or resource packs, try disabling them to see if they are causing the issue.</li>
+        </ol>
+        <p>If the issue persists, consider reinstalling your audio drivers or contacting our support team for further help.</p>
+    </div>
+</section>
+
+
+<section class="section">
+    <h2>Minecraft Skin Not Showing</h2>
+    <div class="problem-content">
+        <p>If your Minecraft skin isn't showing properly, try the following steps:</p>
+        <ol>
+            <li>Check that your Minecraft account is properly linked to the correct skin. If you're using a custom skin, make sure it has been uploaded to your Mojang or Microsoft account.</li>
+            <li>Ensure the skin is in the correct format (.png) and does not exceed the file size limit (usually 64x64 pixels for regular skins).</li>
+            <li>If you're using a custom Minecraft client or mod pack, ensure that the skin is not being overridden by the mod or pack's default settings.</li>
+            <li>Try logging out and back into Minecraft to reset the skin settings.</li>
+            <li>Check if the issue is with the server. Some servers may override player skins with default skins for various reasons.</li>
+            <li>If the problem only occurs in certain versions of Minecraft, try using a different version to see if the skin issue persists.</li>
+        </ol>
+        <p>If the issue is still not resolved, consider reaching out to Mojang support or our support team for further assistance.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Connection Timed Out</h2>
+    <div class="problem-content">
+        <p>If you are experiencing a "Connection Timed Out" error when trying to join a server, try these steps:</p>
+        <ol>
+            <li>Ensure your internet connection is stable. Try resetting your router or switching to a wired connection if possible.</li>
+            <li>Check if the server you are trying to join is online. Server downtime or maintenance could be the reason for the issue.</li>
+            <li>Disable any active VPNs or proxies that might interfere with the connection.</li>
+            <li>Verify your firewall settings to ensure that Minecraft has the proper permissions to access the internet.</li>
+        </ol>
+        <p>If the issue persists, contact your internet service provider or the server administrator for further assistance.</p>
+    </div>
+</section>
+
+
+<section class="section">
+    <h2>Failed to Authenticate Your Connection</h2>
+    <div class="problem-content">
+        <p>If you receive a "Failed to Authenticate Your Connection" error, try these steps:</p>
+        <ol>
+            <li>Log out of your Minecraft account and log back in to refresh your session. This can resolve session-related issues.</li>
+            <li>Ensure that your account is linked to a valid and active Mojang or Microsoft account.</li>
+            <li>Make sure you are connected to the official Minecraft launcher and that it is updated to the latest version.</li>
+            <li>Restart your computer to clear any session cache that may be causing the authentication issue.</li>
+        </ol>
+        <p>If this problem continues, contact Mojang support or your server administrator for further help.</p>
+    </div>
+</section>
+
+
+<section class="section">
+    <h2>Server Version Mismatch</h2>
+    <div class="problem-content">
+        <p>If you encounter a "Server Version Mismatch" message when joining a server, try the following:</p>
+        <ol>
+            <li>Ensure that your Minecraft client is running the same version as the server. Check the server's website or information for the correct version.</li>
+            <li>If you are using a custom launcher, double-check that the correct profile or mod pack version is selected before joining.</li>
+            <li>Update your client to match the server's version if necessary or switch to a compatible version through the Minecraft launcher.</li>
+        </ol>
+        <p>If you continue to have version issues, verify with the server's administrators for any specific mod or plugin requirements.</p>
+    </div>
+</section>
+
+
+<section class="section">
+    <h2>Connection Refused: No Further Information</h2>
+    <div class="problem-content">
+        <p>If you receive a "Connection Refused: No Further Information" error, try these solutions:</p>
+        <ol>
+            <li>Ensure that the server is running and not experiencing any downtime or maintenance issues.</li>
+            <li>Verify that you have entered the correct IP address and port for the server.</li>
+            <li>Disable any active firewall or security software temporarily to see if it is blocking the connection.</li>
+        </ol>
+        <p>If the issue persists, confirm with the server administrators that the server is configured to accept connections.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Stuck on "Loading Terrain"</h2>
+    <div class="problem-content">
+        <p>If your game gets stuck on the "Loading Terrain" screen when joining a server, try the following:</p>
+        <ol>
+            <li>Close and restart your Minecraft client to refresh the connection.</li>
+            <li>Reduce render distance in your video settings to lower the graphical load.</li>
+            <li>Allocate more RAM to Minecraft through the launcher settings if possible to improve performance.</li>
+        </ol>
+        <p>If these steps do not help, try reinstalling the game or checking for client mod conflicts.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Internal Exception: java.io.IOException</h2>
+    <div class="problem-content">
+        <p>If you get an "Internal Exception: java.io.IOException" error when joining a server, follow these tips:</p>
+        <ol>
+            <li>Check your internet connection for stability, as this error often indicates a disconnection.</li>
+            <li>Clear the DNS cache on your computer by running <code>ipconfig /flushdns</code> in Command Prompt (Windows) or restarting your device (Mac).</li>
+            <li>Verify that you do not have any conflicting background processes consuming network resources.</li>
+        </ol>
+        <p>Consider contacting your internet service provider if connection issues persist.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Outdated Client</h2>
+    <div class="problem-content">
+        <p>If you receive an "Outdated Client" error when joining a server, follow these steps:</p>
+        <ol>
+            <li>Ensure your Minecraft client is updated to the version supported by the server.</li>
+            <li>If the server runs an older version, switch to that version by creating a new installation profile in the Minecraft launcher.</li>
+            <li>Check if the server requires a specific mod pack or additional files and install them as necessary.</li>
+        </ol>
+        <p>If you still encounter problems, refer to the server's website for version details and compatibility requirements.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Failed to Verify Username</h2>
+    <div class="problem-content">
+        <p>If you receive a "Failed to Verify Username" error, try these steps:</p>
+        <ol>
+            <li>Log out of your Minecraft account in the launcher and log back in to refresh your authentication session.</li>
+            <li>Ensure that you are connected to the internet and that Minecraft's authentication servers are not experiencing downtime.</li>
+            <li>Check that your Minecraft launcher is up-to-date and running in online mode.</li>
+        </ol>
+        <p>If the problem persists, verify your account details and check Mojang's server status page for ongoing issues.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Can't Connect: Server Is Full</h2>
+    <div class="problem-content">
+        <p>If you see a "Server Is Full" message when trying to join, consider these steps:</p>
+        <ol>
+            <li>Wait for an open slot on the server. Some servers have a player limit that cannot be exceeded.</li>
+            <li>Check if the server has a priority or VIP access system that grants certain users priority during peak times.</li>
+            <li>Contact the server's administrators to see if there are any special access rules or schedules for joining.</li>
+        </ol>
+        <p>If this is a recurring issue, consider donating or joining the server's VIP program if applicable for priority access.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Mod Rejection or Missing Mods</h2>
+    <div class="problem-content">
+        <p>If you encounter a "Mod Rejection" or "Missing Mods" error when joining a modded server, try the following:</p>
+        <ol>
+            <li>Ensure that you have installed all required mods for the server. Double-check the server's mod list and download matching versions.</li>
+            <li>Use the same mod loader (e.g., Forge or Fabric) as specified by the server.</li>
+            <li>Check that your client and server mod configurations are aligned, including any mod dependencies.</li>
+        </ol>
+        <p>If issues continue, consider re-downloading the mods or seeking assistance from the server's community for help.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>High Latency or Lag</h2>
+    <div class="problem-content">
+        <p>If you are experiencing high latency or lag when joining a server, try these solutions:</p>
+        <ol>
+            <li>Connect to a server geographically closer to your location to reduce ping.</li>
+            <li>Close background applications that consume bandwidth or system resources.</li>
+            <li>Lower your Minecraft video settings, such as render distance, to improve game performance.</li>
+        </ol>
+        <p>If lag issues persist, consider upgrading your internet plan or using an Ethernet connection for better stability.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Banned from Server</h2>
+    <div class="problem-content">
+        <p>If you receive a "You are banned from this server" message, follow these steps:</p>
+        <ol>
+            <li>Review the server's rules and guidelines to understand the reason for the ban.</li>
+            <li>Contact the server's staff or administrators to appeal your ban if you believe it was issued in error or have taken corrective actions.</li>
+            <li>Ensure that your conduct on the server follows all rules to prevent future issues.</li>
+        </ol>
+        <p>If your ban appeal is not accepted, respect the server's decision or find another server with similar gameplay.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Can't Resolve Hostname</h2>
+    <div class="problem-content">
+        <p>If you see a "Can't Resolve Hostname" error when trying to join, try these solutions:</p>
+        <ol>
+            <li>Ensure that you have entered the server's IP address or domain name correctly, including any subdomains or special characters.</li>
+            <li>Check your internet connection and try refreshing your DNS by restarting your router or running <code>ipconfig /flushdns</code> on Windows.</li>
+            <li>Try using the server's direct IP address instead of the domain name if applicable.</li>
+        </ol>
+        <p>If the issue persists, the server's DNS configuration may be incorrect; contact the server's support for assistance.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Unable to Locate Server</h2>
+    <div class="problem-content">
+        <p>If you receive an "Unable to Locate Server" message, consider these steps:</p>
+        <ol>
+            <li>Double-check that the server's IP address or hostname is correct and active.</li>
+            <li>Verify that your internet connection is working properly by trying to access other servers or websites.</li>
+            <li>Ensure that the server is not behind a firewall or port-blocking service that could prevent access.</li>
+        </ol>
+        <p>Contact the server administrators to verify that the server is running and accessible to the public.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Server Connection Freezes</h2>
+    <div class="problem-content">
+        <p>If your game freezes when trying to connect to a server, try the following:</p>
+        <ol>
+            <li>Close other resource-heavy applications running in the background to free up system resources.</li>
+            <li>Increase the amount of RAM allocated to Minecraft in the launcher settings.</li>
+            <li>Update your graphics drivers and ensure your Java version is up to date.</li>
+        </ol>
+        <p>If the issue continues, consider reinstalling Minecraft or checking for conflicts with installed mods.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Frequent Disconnections</h2>
+    <div class="problem-content">
+        <p>If you are frequently disconnected from a server, try these solutions:</p>
+        <ol>
+            <li>Check if there is network congestion or interference, especially when using Wi-Fi. Switch to a wired connection if possible.</li>
+            <li>Ensure that your network drivers are up to date and that your router firmware is current.</li>
+            <li>Disable any network-hogging applications or downloads running on your device or connected devices.</li>
+        </ol>
+        <p>Persistent issues may require contacting your ISP to rule out network problems.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Invalid Session (Try Restarting Your Game)</h2>
+    <div class="problem-content">
+        <p>If you encounter an "Invalid Session" error, try these steps:</p>
+        <ol>
+            <li>Log out of your Minecraft account in the launcher and log back in to refresh your session.</li>
+            <li>Restart your Minecraft launcher and try joining the server again.</li>
+            <li>Ensure that you are using the official launcher and not a third-party client with potential session issues.</li>
+        </ol>
+        <p>If problems persist, make sure your account credentials are correct and secure.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Server Resource Pack Not Downloading</h2>
+    <div class="problem-content">
+        <p>If a server's resource pack isn't downloading automatically, follow these tips:</p>
+        <ol>
+            <li>Ensure that "Server Resource Packs" are set to "Enabled" in the server's settings under "Edit" in the multiplayer menu.</li>
+            <li>Clear your resource pack folder by deleting any previous failed downloads in the <code>.minecraft/resourcepacks</code> directory.</li>
+            <li>Try connecting with a different internet connection or disabling any download-restricting software.</li>
+        </ol>
+        <p>Contact the server staff for assistance if the resource pack link may be broken or outdated.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Server-Specific Bans (IP Ban)</h2>
+    <div class="problem-content">
+        <p>If you receive an IP ban message when joining a server, consider these actions:</p>
+        <ol>
+            <li>Review any previous activity that may have led to the ban to understand the reason.</li>
+            <li>Contact the server administrators for an appeal process if you believe the ban was unjustified or want to explain mitigating circumstances.</li>
+            <li>Ensure that no one else using your network has violated server rules to cause the IP ban.</li>
+        </ol>
+        <p>Respect the server's decision if an appeal is not accepted, and consider joining a different server.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Outdated Server</h2>
+    <div class="problem-content">
+        <p>If you see an "Outdated Server" error when trying to join, try these steps:</p>
+        <ol>
+            <li>Ensure your Minecraft client is running an older version that matches the server's version. Switch versions in the launcher if needed.</li>
+            <li>Contact the server's staff or check their website to verify which version is currently supported.</li>
+            <li>Install any additional patches or updates required by the server to join.</li>
+        </ol>
+        <p>For long-term solutions, monitor server updates and adjust your client accordingly.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Server Lag Spikes</h2>
+    <div class="problem-content">
+        <p>If you experience lag spikes on a server, try these solutions:</p>
+        <ol>
+            <li>Reduce video settings such as graphics, smooth lighting, and particles to lower the load on your system.</li>
+            <li>Play on servers with lower player counts if large populations contribute to server lag.</li>
+            <li>Check for scheduled maintenance or lag-inducing events on the server that may temporarily affect performance.</li>
+        </ol>
+        <p>Contact server staff if lag spikes persist to see if they are aware of ongoing server issues.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Java Version Errors</h2>
+    <div class="problem-content">
+        <p>If you encounter Java-related errors when joining a server, try these steps:</p>
+        <ol>
+            <li>Ensure that the Java version you have installed matches the version required by the server (e.g., Java 17 for newer servers).</li>
+            <li>Uninstall and reinstall Java to clear any potential corrupted files.</li>
+            <li>Update your Java runtime environment to the latest version compatible with your operating system.</li>
+        </ol>
+        <p>For Java-related issues, check server forums for specific requirements or patches.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Unable to Access Realms</h2>
+    <div class="problem-content">
+        <p>If you cannot access Minecraft Realms, try these solutions:</p>
+        <ol>
+            <li>Ensure that your Minecraft subscription is active and not expired.</li>
+            <li>Log out and back into your Minecraft account to refresh your connection to Realms.</li>
+            <li>Verify that Minecraft Realms are not undergoing maintenance by checking Mojang's server status page.</li>
+        </ol>
+        <p>If issues persist, reach out to Mojang support for further assistance with Realms access.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Firewall Blocking Connection</h2>
+    <div class="problem-content">
+        <p>If your connection to a server is blocked by a firewall, try these steps:</p>
+        <ol>
+            <li>Ensure that Minecraft is allowed through your computer's firewall. Add an exception if necessary.</li>
+            <li>Disable any third-party antivirus or security software temporarily to see if it is interfering with the connection.</li>
+            <li>Check your router's firewall settings to ensure it is not blocking the necessary ports for Minecraft.</li>
+        </ol>
+        <p>Re-enable security software after testing to maintain protection on your device.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Server Disconnects During Gameplay</h2>
+    <div class="problem-content">
+        <p>If you get disconnected frequently while playing on a server, try these tips:</p>
+        <ol>
+            <li>Make sure your internet connection is stable, and switch to an Ethernet connection for more reliable connectivity.</li>
+            <li>Update your network drivers and ensure your router firmware is up to date.</li>
+            <li>Disable or limit background downloads and streaming to reduce bandwidth usage.</li>
+        </ol>
+        <p>Reach out to the server administrators to check if there are server-side issues causing disconnections.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Failed to Connect: Bad Login</h2>
+    <div class="problem-content">
+        <p>If you see a "Bad Login" error when trying to join a server, try the following:</p>
+        <ol>
+            <li>Log out of your Minecraft account and log back in to refresh your login session.</li>
+            <li>Ensure that you are using the correct version of Minecraft that matches the server.</li>
+            <li>Restart your Minecraft launcher to reset the session.</li>
+        </ol>
+        <p>If the problem continues, check your internet connection or try logging in from another device.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Resource Pack Compatibility Issues</h2>
+    <div class="problem-content">
+        <p>If a server's resource pack causes errors or crashes, try these steps:</p>
+        <ol>
+            <li>Ensure that your Minecraft client has enough RAM allocated to handle resource packs.</li>
+            <li>Download the server's resource pack manually and install it in the <code>.minecraft/resourcepacks</code> folder.</li>
+            <li>Check for conflicting resource packs in your client and disable any that may interfere.</li>
+        </ol>
+        <p>Contact the server staff for details on which resource packs are compatible if needed.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Server Stuck on Loading Screen</h2>
+    <div class="problem-content">
+        <p>If you get stuck on the loading screen while joining a server, try these solutions:</p>
+        <ol>
+            <li>Ensure that your client version matches the server version, including any mod packs.</li>
+            <li>Allocate more RAM to Minecraft through the launcher settings to improve loading times.</li>
+            <li>Check if any background applications are using excessive system resources and close them.</li>
+        </ol>
+        <p>Persistent loading issues may require a client reinstall or removal of conflicting mods.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Server-Specific Plugin Issues</h2>
+    <div class="problem-content">
+        <p>If you experience problems related to server plugins, try these steps:</p>
+        <ol>
+            <li>Ensure that your client has compatible plugins or mod support if the server uses specific plugins.</li>
+            <li>Check the server's website or forums for a list of required or optional client-side plugins.</li>
+            <li>Disable any client-side mods or plugins that may conflict with server plugins.</li>
+        </ol>
+        <p>Reach out to the server staff for plugin-specific help or updates.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Whitelist Error After Approval</h2>
+    <div class="problem-content">
+        <p>If you were approved for a whitelist but still see an error, try these steps:</p>
+        <ol>
+            <li>Double-check that your Minecraft username was entered correctly during the whitelist application process.</li>
+            <li>Contact server staff to confirm that your username was added to the whitelist.</li>
+            <li>Wait for the server's whitelist to refresh, as changes may take a few minutes to apply.</li>
+        </ol>
+        <p>If the problem persists, reapply or follow up with server administrators.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Invalid Server Key</h2>
+    <div class="problem-content">
+        <p>If you see an "Invalid Server Key" error when connecting, consider these tips:</p>
+        <ol>
+            <li>Ensure that your Minecraft client is fully updated to avoid encryption key mismatches.</li>
+            <li>Restart your router to reset network settings that may interfere with the connection.</li>
+            <li>Check that your account is secure and not being used by anyone else.</li>
+        </ol>
+        <p>For persistent issues, reinstall Minecraft to refresh all client files.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Insufficient Permissions</h2>
+    <div class="problem-content">
+        <p>If you receive an "Insufficient Permissions" message on a server, try these steps:</p>
+        <ol>
+            <li>Check with the server's rules and role permissions to see if you need special access for certain commands or areas.</li>
+            <li>Contact server staff if you believe you should have permission for an action and there is an error.</li>
+            <li>Ensure that your account is linked to any relevant server roles or ranks.</li>
+        </ol>
+        <p>Some permissions may require a donation or role application, so verify with server administrators.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Server Rejection: Blocked IP</h2>
+    <div class="problem-content">
+        <p>If your IP is blocked by a server, consider these solutions:</p>
+        <ol>
+            <li>Check if your network's IP is shared with others who may have violated server rules, resulting in a block.</li>
+            <li>Contact the server staff to discuss possible unblocking or use a VPN (if allowed) to access from a different IP.</li>
+            <li>Reset your router to obtain a new IP address, if supported by your ISP.</li>
+        </ol>
+        <p>Ensure to follow server rules to avoid future issues with blocked access.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Outdated Mods Installed</h2>
+    <div class="problem-content">
+        <p>If you have outdated mods installed that conflict with server access, try these steps:</p>
+        <ol>
+            <li>Verify the server's mod list and update any outdated client-side mods to match the server's versions.</li>
+            <li>Remove mods that are no longer supported by the server to avoid compatibility issues.</li>
+            <li>Reinstall any mods if there are file corruption concerns.</li>
+        </ol>
+        <p>Check server forums for the latest mod version requirements and troubleshooting tips.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Wrong Version of Minecraft</h2>
+    <div class="problem-content">
+        <p>If the game shows a version mismatch when trying to join, follow these steps:</p>
+        <ol>
+            <li>Ensure your Minecraft version matches the server's required version.</li>
+            <li>To change your version, open the Minecraft launcher, click on “Installations,” and select the correct version.</li>
+            <li>If you’re unsure about the required version, check the server’s website or forums for details.</li>
+        </ol>
+        <p>After updating, try joining the server again.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Server Timeout</h2>
+    <div class="problem-content">
+        <p>If you’re getting a server timeout error, try these troubleshooting steps:</p>
+        <ol>
+            <li>Check your internet connection for stability.</li>
+            <li>Try restarting your game or computer to reset your connection.</li>
+            <li>If the timeout occurs on a specific server, verify that the server is not experiencing heavy traffic.</li>
+        </ol>
+        <p>If the issue persists, the server may be experiencing issues, so check its status on its website.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Missing Textures or Blocks</h2>
+    <div class="problem-content">
+        <p>If you see missing textures or blocks, follow these steps:</p>
+        <ol>
+            <li>Ensure the resource pack used by the server is installed correctly on your client.</li>
+            <li>Update or reinstall any outdated resource packs.</li>
+            <li>Check for compatibility between the resource pack and the version of Minecraft you’re using.</li>
+        </ol>
+        <p>If issues persist, verify if the server requires specific texture packs and download them.</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Unable to Join the Server with a VPN</h2>
+    <div class="problem-content">
+        <p>If you’re unable to join the server using a VPN, try these steps:</p>
+        <ol>
+            <li>Some servers block VPN connections for security reasons. Try disabling the VPN and joining without it.</li>
+            <li>If the VPN is necessary, try switching to a different server or location.</li>
+            <li>Contact the server admin if you believe the VPN is being blocked by mistake.</li>
+        </ol>
+        <p>Most servers prefer players to join without VPNs for better performance and security.</p>
+    </div>
+</section>
+
+
+<section class="section">
+    <h2>World Corruption Issues</h2>
+    <div class="problem-content">
+        <p>If you encounter world corruption or crashes while playing, try the following:</p>
+        <ol>
+            <li>Check if the server is running any unstable or outdated plugins or mods.</li>
+            <li>If the issue is local, try clearing your game cache or reinstalling Minecraft.</li>
+            <li>Report the issue to the server admins so they can address any potential server-side issues.</li>
+        </ol>
+        <p>Sometimes world corruption is caused by server instability, so patience is key.</p>
+    </div>
+</section>
+
+
+
+<section class="section" id="chat-not-displaying">
+    <h2>Chat Messages Not Displayed</h2>
+    <div class="problem-content">
+        <p>If you can't see chat messages, try these steps:</p>
+        <ol>
+            <li>Ensure chat settings are enabled in Minecraft (Options > Chat Settings).</li>
+            <li>Check privacy settings if on a child account, as chat may be restricted.</li>
+            <li>Make sure you're not muted by a moderator on the server.</li>
+            <li>Restart your Minecraft client and try joining again.</li>
+        </ol>
+        <p>If the issue persists, contact our support team on Discord.</p>
+    </div>
+</section>
+
+<section class="section" id="frequent-crashes">
+    <h2>Frequent Game Crashes</h2>
+    <div class="problem-content">
+        <p>If your game crashes frequently, try these solutions:</p>
+        <ol>
+            <li>Ensure you have the latest version of Minecraft and update Java if needed.</li>
+            <li>Clear the game’s cache files in the .minecraft folder.</li>
+            <li>Allocate more RAM to Minecraft in the launcher settings.</li>
+            <li>Check if any mods are causing compatibility issues by disabling them one at a time.</li>
+        </ol>
+        <p>If the crashes continue, consider reinstalling Minecraft or updating your drivers.</p>
+    </div>
+</section>
+
+<section class="section" id="lost-connection">
+    <h2>Lost Connection Mid-Game</h2>
+    <div class="problem-content">
+        <p>If you keep losing connection mid-game, try the following steps:</p>
+        <ol>
+            <li>Check your internet connection stability and restart your router if necessary.</li>
+            <li>Use a wired Ethernet connection instead of Wi-Fi for a more stable connection.</li>
+            <li>Close background applications that might consume bandwidth.</li>
+        </ol>
+        <p>If the issue persists, try a different server region or contact your ISP.</p>
+    </div>
+</section>
+
+<section class="section" id="resource-pack-issues">
+    <h2>Resource Pack Won't Load</h2>
+    <div class="problem-content">
+        <p>If the server's resource pack isn’t loading, follow these steps:</p>
+        <ol>
+            <li>Ensure "Server Resource Packs" are set to "Enabled" in multiplayer settings.</li>
+            <li>Delete previous failed downloads in the .minecraft/resourcepacks folder.</li>
+            <li>Try manually downloading the pack if the server provides a link.</li>
+        </ol>
+        <p>If problems persist, contact server support for assistance.</p>
+    </div>
+</section>
+
+<section class="section" id="custom-skin-not-working">
+    <h2>Custom Skin Not Showing</h2>
+    <div class="problem-content">
+        <p>If your custom skin isn't displaying, try these steps:</p>
+        <ol>
+            <li>Ensure your skin file meets the correct format (64x64 pixels, .png format).</li>
+            <li>Log out and back into Minecraft to reset your skin settings.</li>
+            <li>Verify your internet connection, as connectivity issues can affect skins.</li>
+        </ol>
+        <p>If the skin still doesn’t load, contact Mojang support.</p>
+    </div>
+</section>
+
+<section class="section" id="vpn-access-issues">
+    <h2>Unable to Join Server with a VPN</h2>
+    <div class="problem-content">
+        <p>If you cannot connect to the server while using a VPN, try these steps:</p>
+        <ol>
+            <li>Disable the VPN and try connecting without it, as some servers block VPNs.</li>
+            <li>If you must use a VPN, try a different server location.</li>
+        </ol>
+        <p>Contact server support if you believe the VPN block is an error.</p>
+    </div>
+</section>
+
+<section class="section" id="account-authentication-issues">
+    <h2>Account Authentication Failed</h2>
+    <div class="problem-content">
+        <p>If you receive an authentication error, follow these steps:</p>
+        <ol>
+            <li>Log out of Minecraft and log back in to refresh your session.</li>
+            <li>Check your account status on the Mojang or Microsoft website.</li>
+            <li>Verify your internet connection is stable.</li>
+        </ol>
+        <p>If problems persist, contact Mojang support for assistance.</p>
+    </div>
+</section>
+
+<section class="section" id="stuck-at-loading-terrain">
+    <h2>Stuck on "Loading Terrain"</h2>
+    <div class="problem-content">
+        <p>If your game gets stuck on the "Loading Terrain" screen, try these steps:</p>
+        <ol>
+            <li>Close and restart Minecraft to refresh the connection.</li>
+            <li>Lower your render distance in the video settings.</li>
+            <li>Allocate more RAM to Minecraft in the launcher settings.</li>
+        </ol>
+        <p>If issues continue, try reinstalling Minecraft.</p>
+    </div>
+</section>
+
+<section class="section" id="launcher-fails-to-start">
+    <h2>Launcher Fails to Start</h2>
+    <div class="problem-content">
+        <p>If your Minecraft launcher isn't opening, try the following:</p>
+        <ol>
+            <li>Ensure your computer meets the system requirements for the launcher version.</li>
+            <li>Reinstall the launcher or update to the latest version.</li>
+            <li>Clear temporary files in your system, as they may interfere with launching.</li>
+        </ol>
+        <p>If the launcher still won’t open, contact Minecraft support.</p>
+    </div>
+</section>
+
+<section class="section" id="server-full">
+    <h2>Server Full - Unable to Join</h2>
+    <div class="problem-content">
+        <p>If you see a "Server is Full" message, consider these options:</p>
+        <ol>
+            <li>Wait until there is an open slot on the server.</li>
+            <li>If the server has a VIP or priority system, consider joining it for faster access.</li>
+        </ol>
+        <p>If full access issues persist, contact the server administrators.</p>
+    </div>
+</section>
+
+<section class="section" id="mod-compatibility-issues">
+    <h2>Mod Compatibility Issues</h2>
+    <div class="problem-content">
+        <p>If mods are causing issues, try these solutions:</p>
+        <ol>
+            <li>Ensure all mods are compatible with the current Minecraft version.</li>
+            <li>Check for mod updates or versions compatible with the server.</li>
+            <li>Disable conflicting mods temporarily and test for stability.</li>
+        </ol>
+        <p>If mod issues continue, check server mod guidelines.</p>
+    </div>
+</section>
+
+<section class="section" id="failed-to-verify-username">
+    <h2>Failed to Verify Username</h2>
+    <div class="problem-content">
+        <p>If you receive a "Failed to Verify Username" error on a cracked server, try these steps:</p>
+        <ol>
+            <li>Ensure the server allows cracked accounts by checking server rules or forums.</li>
+            <li>Log out and back into the server to refresh your session.</li>
+            <li>Double-check the username you are using, as some servers may require unique usernames for cracked accounts.</li>
+        </ol>
+        <p>If issues persist, contact server support to confirm cracked account access.</p>
+    </div>
+</section>
+
+<section class="section" id="cant-register">
+    <h2>Cannot Register on Server</h2>
+    <div class="problem-content">
+        <p>If you’re having trouble registering on a cracked server, try these steps:</p>
+        <ol>
+            <li>Type <code>/register password password</code>, replacing "password" with your chosen password twice.</li>
+            <li>Check for any registration requirements or syntax differences on the server’s website or forums.</li>
+            <li>Make sure you haven’t already registered with that username.</li>
+        </ol>
+        <p>If you’re still unable to register, contact server staff for assistance.</p>
+    </div>
+</section>
+
+<section class="section" id="invalid-session">
+    <h2>Invalid Session Error</h2>
+    <div class="problem-content">
+        <p>If you see an "Invalid Session" error on a cracked server, try these steps:</p>
+        <ol>
+            <li>Log out of the server and log back in to refresh your session.</li>
+            <li>Try restarting your Minecraft client and joining again.</li>
+            <li>Ensure your username is not already in use by another player on the server.</li>
+        </ol>
+        <p>If the error persists, contact server staff for additional help.</p>
+    </div>
+</section>
+
+<section class="section" id="cant-log-in">
+    <h2>Cannot Log In to Server</h2>
+    <div class="problem-content">
+        <p>If you’re unable to log in to a cracked server, try these solutions:</p>
+        <ol>
+            <li>Use <code>/login password</code> (replacing "password" with your account password) after connecting.</li>
+            <li>Make sure you’re using the correct password you registered with.</li>
+            <li>If you forgot your password, see if the server has a password recovery option or contact support.</li>
+        </ol>
+        <p>If login issues continue, a server admin may be able to reset your password.</p>
+    </div>
+</section>
+
+<section class="section" id="name-in-use">
+    <h2>Username Already in Use</h2>
+    <div class="problem-content">
+        <p>If you see a "Username Already in Use" message, try the following:</p>
+        <ol>
+            <li>Ensure no other device or player is logged in with your username.</li>
+            <li>Wait a few minutes and try reconnecting to release the username from the server’s session.</li>
+            <li>If you keep seeing this error, try a different username or contact server staff for help.</li>
+        </ol>
+        <p>This issue may occur on cracked servers due to non-unique usernames.</p>
+    </div>
+</section>
+
+<section class="section" id="stuck-on-register-screen">
+    <h2>Stuck on Registration/Login Screen</h2>
+    <div class="problem-content">
+        <p>If you can’t get past the registration or login screen, try these steps:</p>
+        <ol>
+            <li>Ensure you’re typing the commands correctly (e.g., <code>/register password password</code>).</li>
+            <li>Check for any restrictions, such as not using certain characters in passwords.</li>
+            <li>Log out and rejoin the server to reset the screen.</li>
+        </ol>
+        <p>If you’re still stuck, contact server staff for assistance.</p>
+    </div>
+</section>
+
+<section class="section" id="cant-access-premium-features">
+    <h2>Unable to Access Premium Features</h2>
+    <div class="problem-content">
+        <p>If certain features are locked for cracked accounts, try these steps:</p>
+        <ol>
+            <li>Check the server’s website or forums to see if premium access is limited to licensed accounts.</li>
+            <li>See if the server offers a VIP or premium account upgrade to access additional features.</li>
+            <li>If premium access isn’t available to cracked accounts, consider upgrading to a licensed Minecraft account.</li>
+        </ol>
+        <p>Cracked servers may restrict premium features to licensed players only.</p>
+    </div>
+</section>
+
+<section class="section" id="account-compromised">
+    <h2>Account Compromised or Hacked</h2>
+    <div class="problem-content">
+        <p>If you suspect someone else is using your account on a cracked server, try the following:</p>
+        <ol>
+            <li>Change your password immediately using <code>/changepassword oldpassword newpassword</code>.</li>
+            <li>Use a stronger password to prevent unauthorized access.</li>
+            <li>Contact server staff if you need assistance recovering your account.</li>
+        </ol>
+        <p>For security, avoid sharing your password with others.</p>
+    </div>
+</section>
+
+<section class="section" id="frequent-disconnects">
+    <h2>Frequent Disconnects on Cracked Server</h2>
+    <div class="problem-content">
+        <p>If you keep disconnecting from a cracked server, try these steps:</p>
+        <ol>
+            <li>Ensure your internet connection is stable and avoid using a VPN if possible.</li>
+            <li>Try connecting to a different server region or IP if available.</li>
+            <li>Contact the server administrators if disconnects happen to multiple players, as it may be a server issue.</li>
+        </ol>
+        <p>Frequent disconnects can also be due to high server traffic on cracked servers.</p>
+    </div>
+</section>
+
+<section class="section" id="cant-chat">
+    <h2>Unable to Chat</h2>
+    <div class="problem-content">
+        <p>If you’re unable to send chat messages on a cracked server, try these solutions:</p>
+        <ol>
+            <li>Ensure you’re logged in with <code>/login password</code> (replacing "password" with your actual password).</li>
+            <li>Check if chat is disabled for new players or restricted to certain ranks.</li>
+            <li>Contact a moderator if you believe you were muted by mistake.</li>
+        </ol>
+        <p>Some cracked servers limit chat for unverified or new players.</p>
+    </div>
+</section>
+
+<section class="section" id="server-auth-issues">
+    <h2>Authentication Plugin Issues</h2>
+    <div class="problem-content">
+        <p>If you’re having trouble with the server’s authentication plugin, try these steps:</p>
+        <ol>
+            <li>Follow the correct format for login or registration commands (e.g., <code>/login password</code> or <code>/register password password</code>).</li>
+            <li>Ensure you’re using a unique username to avoid conflicts with other players.</li>
+            <li>Contact server support if the plugin continues to malfunction.</li>
+        </ol>
+        <p>Authentication plugins on cracked servers can sometimes cause login issues.</p>
+    </div>
+</section>
+
+
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Fusion Network. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Navigation menu toggle
+        const burger = document.getElementById('burger');
+        const navLinks = document.getElementById('navLinks');
+        const mainContent = document.querySelector('main');
+
+        burger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            document.body.classList.toggle('menu-open');
+            burger.textContent = navLinks.classList.contains('show') ? '✕' : '☰';
+            
+            if (navLinks.classList.contains('show')) {
+                setTimeout(() => {
+                    mainContent.style.visibility = 'hidden';
+                }, 300);
+            } else {
+                mainContent.style.visibility = 'visible';
+            }
+        });
+
+        // Expandable sections
+        const problemHeaders = document.querySelectorAll('.section h2');
+        problemHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                const content = header.nextElementSibling;
+                content.classList.toggle('active');
+            });
+        });
+
+    </script>   
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fusion Network - Register</title>
+    <link rel="icon" type="icon/x-icon" href="img/logo.webp" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary: #a78bfa;
+            --secondary: #4ade80;
+            --background: #111827;
+            --surface: #1f2937;
+            --text: #e5e7eb;
+            --text-secondary: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('bg.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-container > * {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .auth-container > *:nth-child(1) { animation-delay: 0.1s; }
+        .auth-container > *:nth-child(2) { animation-delay: 0.2s; }
+        .auth-container > *:nth-child(3) { animation-delay: 0.3s; }
+
+        header {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background-color: rgba(167, 139, 250, 0.1);
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 200px);
+        }
+
+        .auth-container {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--surface);
+            border-radius: 0.5rem;
+            background-color: rgba(31, 41, 55, 0.6);
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .form-group input:hover {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            background-color: var(--primary);
+            color: var(--background);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background-color: #9061f9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 1;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(40, 40);
+            }
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .toggle-form a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-form a:hover {
+            color: #9061f9;
+        }
+
+        .burger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(31, 41, 55, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 4rem 1rem 1rem;
+                z-index: 1000;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .burger {
+                display: block;
+                position: relative;
+                z-index: 1001;
+            }
+        }
+
+        #error-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            color: #e53e3e;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            border-left: 4px solid #e53e3e;
+        }
+
+        #error-popup.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #error-popup .icon {
+            color: #e53e3e;
+            font-size: 1.5rem;
+        }
+
+        #error-popup .message {
+            flex-grow: 1;
+        }
+
+        #error-popup .close-btn {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #718096;
+            transition: color 0.2s ease;
+        }
+
+        #error-popup .close-btn:hover {
+            color: #4a5568;
+        }
+
+        /* Demo button styling */
+        #show-error {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        #show-error:hover {
+            background-color: #3182ce;
+        }
+    </style>
+</head>
+<body>
+    <div id="error-popup">
+        <span class="icon">⚠️</span>
+        <span class="message">User already exists</span>
+        <span class="close-btn" onclick="closePopup()">X</span>
+    </div>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="/home" class="logo">
+                    <img src="img/logo.webp" alt="Fusion Network Logo" style="width: 30px; height: 30px;">
+                    Fusion Network
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <a href="/home">Home</a>
+                    <a href="/forums" class="">Forums</a>
+                    <a href="/apply-staff">Staff Apply</a>
+                    <a href="/notices" >Notices</a>
+                    <a href="/profilepage" class="active">
+                        <img src="https://mc-heads.net/avatar/steve/24" alt="Steve Head" style="width: 24px; height: 24px; border-radius: 4px; vertical-align: middle; margin-right: 5px;">
+                        Register
+                    </a>
+                </div>
+                <button class="burger" id="burger" aria-label="Toggle menu">☰</button>
+            </nav>
+        </header>
+        <main>
+            <div class="auth-container">
+                <h2>Register</h2>
+                <form action="/register" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn">Register</button>
+                </form>
+                <div class="toggle-form">
+                    <p>Already have an account? <a href="/login">Login</a></p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        const burger = document.getElementById('burger');
+        const navLinks = document.getElementById('navLinks');
+        const mainContent = document.querySelector('main');
+
+        burger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            document.body.classList.toggle('menu-open');
+            burger.textContent = navLinks.classList.contains('show') ? '✕' : '☰';
+            
+            if (navLinks.classList.contains('show')) {
+                setTimeout(() => {
+                    mainContent.style.visibility = 'hidden';
+                }, 300);
+            } else {
+                mainContent.style.visibility = 'visible';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        if (urlParams.has('error') && urlParams.get('error') === 'true') {
+            showErrorPopup();
+        }
+    });
+
+    function showErrorPopup() {
+        const popup = document.getElementById('error-popup');
+        popup.classList.add('show');
+        
+
+        window.history.replaceState(null, '', window.location.pathname);
+
+
+        setTimeout(() => popup.classList.remove('show'), 3000);
+    }
+
+    function closePopup() {
+        document.getElementById('error-popup').classList.remove('show');
+    }
+
+    </script>
+</body>
+</html>

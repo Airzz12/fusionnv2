@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fusion Network - Server Rules and Mod Policy</title>
+    <link rel="icon" type="icon/x-icon" href="img/logo.webp" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary: #a78bfa;
+            --secondary: #4ade80;
+            --background: #111827;
+            --surface: #1f2937;
+            --text: #e5e7eb;
+            --text-secondary: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('bg.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        header {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInDown 0.6s ease-out forwards;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background-color: rgba(167, 139, 250, 0.1);
+        }
+
+        .burger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        main {
+            padding: 2rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: scaleIn 0.6s ease-out 0.3s forwards;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        .section {
+            background-color: rgba(31, 41, 55, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out 0.9s forwards;
+        }
+
+        .mod-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .mod-item {
+            background-color: rgba(31, 41, 55, 0.8);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .mod-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .mod-item h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .mod-item p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 4rem;
+            border-radius: 1rem 1rem 0 0;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 1.2s forwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(31, 41, 55, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 4rem 1rem 1rem;
+                z-index: 1000;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .burger {
+                display: block;
+                position: relative;
+                z-index: 1001;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="/home" class="logo">
+                    <img src="img/logo.webp" alt="Fusion Network Logo" style="width: 30px; height: 30px;">
+                    Fusion Network
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <a href="/home">Home</a>
+                    <a href="/forums">Forums</a>
+                    <a href="/apply-staff">Staff Apply</a>
+                    <a href="/notices">Notices</a>
+                    <a href="/profilepage" class="active">
+                        <img src="https://mc-heads.net/avatar/steve/24" alt="Steve Head" style="width: 24px; height: 24px; border-radius: 4px; vertical-align: middle; margin-right: 5px;">
+                        Profile
+                    </a>
+                </div>
+                <button class="burger" id="burger" aria-label="Toggle menu">☰</button>
+            </nav>
+        </header>
+
+        <main>
+            <section id="mod-policy" class="section">
+                <h1>Fusion Network Server Rules and Mod Policy</h1>
+                <p>To ensure fair play and maintain server stability, we have guidelines on which Minecraft mods are allowed or discouraged on our server. Please review the following information carefully.</p>
+                
+                <h2>Prohibited Mods</h2>
+                <div class="mod-list">
+                    <div class="mod-item">
+                        <h3>X-Ray Mods</h3>
+                        <p>Mods that allow players to see through blocks or locate specific resources are strictly prohibited.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Elytra Chestplate Swapper</h3>
+                        <p>Mods that automate equipment swapping, particularly for Elytra and Chestplates, are forbidden.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Tweakaroo</h3>
+                        <p>The Tweakaroo mod and its features are not permitted on our server.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Mouse Tweaks</h3>
+                        <p>Mods that enhance mouse functionality beyond vanilla capabilities are not allowed.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Accurate Block Placement</h3>
+                        <p>Mods that provide enhanced accuracy for block placement beyond vanilla mechanics are prohibited.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>All Crystal Optimizers (except Marlows)</h3>
+                        <p>Crystal optimization mods are prohibited, with the exception of Marlows' optimizer.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Freecam</h3>
+                        <p>Mods that allow players to detach their camera from their character are prohibited.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Auto Totem</h3>
+                        <p>Mods that automatically equip totems of undying are prohibited.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Macros</h3>
+                        <p>Any form of macro or automated key pressing/clicking is strictly forbidden.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Inventory Tweaks (with automation)</h3>
+                        <p>Inventory management mods that provide automation features are prohibited.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Auto Clicker</h3>
+                        <p>Mods or software that automates clicking or actions are not allowed.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Hack Clients (e.g., hitbox, killaura, crystal aura)</h3>
+                        <p>All hack clients or mods that provide unfair combat advantages are strictly prohibited.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Fast Clicks</h3>
+                        <p>Mods that automate or speed up clicking beyond normal limits are prohibited.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Minimap (with advanced features)</h3>
+                        <p>Minimaps with features such as entity radar or underground cave system views are prohibited.</p>
+                    </div>
+                </div>
+
+                <h2>Allowed Mods</h2>
+                <div class="mod-list">
+                    <div class="mod-item">
+                        <h3>All FPS Boosting Mods</h3>
+                        <p>Any mod that enhances FPS and optimizes performance is allowed.</p>
+                    </div>
+                    <div class="mod-item">
+                        <h3>Marlows' Crystal Optimizer</h3>
+                        <p>Marlows' specific crystal optimization mod is allowed.</p>
+                    </div>
+                </div>
+
+                <h2>Prohibited Clients</h2>
+                <div class="mod-list">
+                    <div class="mod-item">
+                        <h3>Hack/Cheat Clients</h3>
+                        <p>All hack or cheat clients, including but not limited to Wurst Client, Impact, Aristois, Sigma, LiquidBounce, and Inertia, are strictly prohibited.</p>
+                    </div>
+                </div>
+
+                <h2>Penalties for Mod Policy Violations</h2>
+                <div class="mod-item" style="background-color: rgba(220, 38, 38, 0.1); border: 1px solid rgba(220, 38, 38, 0.3);">
+                    <h3>Warning: Zero Tolerance Policy</h3>
+                    <p>We maintain a zero-tolerance policy for the use of prohibited mods, clients, or any form of cheating. Violations of these rules will result in immediate and severe penalties, including but not limited to:</p>
+                    <ul style="list-style-type: disc; padding-left: 20px; margin-top: 10px;">
+                        <li>Immediate temporary 30-day ban from the server</li>
+                        <li>Blacklisting from all associated Fusion Network services</li>
+                        <li>Public listing on our banned players list</li>
+                        <li>Disqualification from staff applications</li>
+                    </ul>
+                    <p style="margin-top: 10px;">We employ advanced detection methods and actively monitor for mod policy violations to ensure a fair and enjoyable experience for all players. There will be no warnings for first-time offenders - use of any prohibited mod or client will result in an immediate ban.</p>
+                </div>
+
+                <p style="margin-top: 2rem; text-align: center; font-weight: bold;">If you're unsure about a specific mod, please ask a staff member before using it on the server.</p>
+                <p style="margin-top: 2rem; text-align: center; color: paleturquoise; font-weight: bold;">If you also think that the Disallowed mods are not really considered cheating, make a ticket on Discord. </p>
+
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Fusion Network. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Navigation menu toggle
+        const burger = document.getElementById('burger');
+        const navLinks = document.getElementById('navLinks');
+        const mainContent = document.querySelector('main');
+
+        burger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            document.body.classList.toggle('menu-open');
+            burger.textContent = navLinks.classList.contains('show') ? '✕' : '☰';
+            
+            if (navLinks.classList.contains('show')) {
+                setTimeout(() => {
+                    mainContent.style.visibility = 'hidden';
+                }, 300);
+            } else {
+                mainContent.style.visibility = 'visible';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
