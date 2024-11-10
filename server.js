@@ -8,15 +8,15 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Load users from JSON file
-const usersFilePath = path.join(__dirname, 'users.json');
-const forumsFilePath = path.join(__dirname, 'forums.json'); // Added path for forums
 
-// Set EJS as the view engine
+const usersFilePath = path.join(__dirname, 'users.json');
+const forumsFilePath = path.join(__dirname, 'forums.json'); 
+
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'Public')));
@@ -37,12 +37,12 @@ const readUsers = () => {
     return JSON.parse(data);
 };
 
-// Write users to the file
+
 const writeUsers = (users) => {
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
 };
 
-// Function to read forums from the JSON file
+
 const readForums = () => {
     if (!fs.existsSync(forumsFilePath)) {
         fs.writeFileSync(forumsFilePath, JSON.stringify([]));
@@ -51,12 +51,11 @@ const readForums = () => {
     return JSON.parse(data);
 };
 
-// Function to write forums to the JSON file
 const writeForums = (forums) => {
     fs.writeFileSync(forumsFilePath, JSON.stringify(forums, null, 2));
 };
 
-// Function to read announcements from the JSON file
+
 const readAnnouncements = () => {
     const announcementsFilePath = path.join(__dirname, 'announcements.json');
     if (!fs.existsSync(announcementsFilePath)) {
@@ -66,16 +65,15 @@ const readAnnouncements = () => {
     return JSON.parse(data);
 };
 
-// Function to write announcements to the JSON file
+
 const writeAnnouncements = (announcements) => {
     const announcementsFilePath = path.join(__dirname, 'announcements.json');
     fs.writeFileSync(announcementsFilePath, JSON.stringify(announcements, null, 2));
 };
 
-// Paths to JSON files
 const applicationsFilePath = path.join(__dirname, 'applications.json');
 
-// Utility Functions to read/write JSON data
+
 const readApplications = () => {
     if (!fs.existsSync(applicationsFilePath)) {
         fs.writeFileSync(applicationsFilePath, JSON.stringify([]));
@@ -90,7 +88,7 @@ const writeApplications = (applications) => {
 
 const statusFilePath = path.join(__dirname, 'status.json'); // Add this with other file paths
 
-// Function to read the staff application status from JSON file
+
 const readStatus = () => {
     if (!fs.existsSync(statusFilePath)) {
         fs.writeFileSync(statusFilePath, JSON.stringify({ staffApplicationsOpen: true, applicationSession: 1 }));
@@ -99,13 +97,50 @@ const readStatus = () => {
     return JSON.parse(data);
 };
 
-// Function to write the staff application status to the JSON file
+
 const writeStatus = (isOpen) => {
     const currentStatus = readStatus();
     const newSession = isOpen ? currentStatus.applicationSession + 1 : currentStatus.applicationSession;
     fs.writeFileSync(statusFilePath, JSON.stringify({ staffApplicationsOpen: isOpen, applicationSession: newSession }));
 };
 
+
+
+app.get('/home', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'index.html'));
+  });
+  
+
+  app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'login.html'));
+  });
+  
+
+  app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'register.html'));
+  });
+  
+ 
+  app.get('/help', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'help.html'));
+  });
+  
+  
+  app.get('/join', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'join.html'));
+  });
+  
+
+  app.get('/mod-policy', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'mod-policy.html'));
+  });
+  
+
+  app.get('/', (req, res) => {
+    res.redirect('/home');
+  });
+  
+  
 
 app.get('/apply-staff', (req, res) => {
     const currentStatus = readStatus();
@@ -114,11 +149,11 @@ app.get('/apply-staff', (req, res) => {
     const error = req.query.error ? req.query.error : null;
     const staffApplicationsOpen = currentStatus.staffApplicationsOpen;
 
-    // Check if user has applied in the current session
+
     const applications = readApplications();
     const userApplication = applications.find(app => app.username === req.session.user && app.session === currentStatus.applicationSession);
 
-    // If no application found in the current session, allow the user to reapply
+
     if (!userApplication) {
         req.session.hasSubmitted = false;
     }
@@ -137,15 +172,15 @@ app.post('/apply-staff', async (req, res) => {
     try {
         const { userId } = req.body;
 
-        // Ensure user has not already applied
+
         if (req.session.hasSubmitted) {
             return res.redirect('/apply-staff?error=You have already applied.');
         }
 
-        // Update or set the application status to 'waiting'
+
         await User.updateOne({ _id: userId }, { applicationStatus: 'waiting' });
 
-        // Set session variable to prevent re-application
+
         req.session.hasSubmitted = true;
 
         res.redirect('/profile/' + userId + '?success=Application submitted successfully');
@@ -158,7 +193,7 @@ app.post('/apply-staff', async (req, res) => {
 
 app.post('/close-staff-applications', (req, res) => {
     if (req.session.role === 'admin') {
-        writeStatus(false); // Close applications
+        writeStatus(false); 
         res.json({ success: true });
     } else {
         res.status(403).json({ success: false });
@@ -167,18 +202,18 @@ app.post('/close-staff-applications', (req, res) => {
 
 app.post('/open-staff-applications', (req, res) => {
     if (req.session.role === 'admin') {
-        writeStatus(true); // Open applications and increment the session
-        req.session.hasSubmitted = false; // Reset session submission flag
+        writeStatus(true); 
+        req.session.hasSubmitted = false; 
         res.json({ success: true });
     } else {
         res.status(403).json({ success: false });
     }
 });
 
-// Route to reset staff applications
+
 app.post('/reset-staff-applications', (req, res) => {
     if (req.session.role === 'admin') {
-        writeApplications([]); // Reset the applications to an empty array
+        writeApplications([]); 
         res.json({ success: true });
     } else {
         res.status(403).json({ success: false, message: 'Unauthorized' });
@@ -196,7 +231,7 @@ app.post('/submit-application', (req, res) => {
     const currentStatus = readStatus();
     const existingApplication = applications.find(app => app.username === req.session.user && app.session === currentStatus.applicationSession);
 
-    // Check if the user has already submitted an application for the current session
+ 
     if (existingApplication) {
         return res.redirect('/apply-staff?error=You have already submitted a staff application. Please wait for a response.');
     }
@@ -211,25 +246,24 @@ app.post('/submit-application', (req, res) => {
         experience: req.body.experience,
         read: false,
         status: 'pending',
-        session: currentStatus.applicationSession // Save the current session with the application
+        session: currentStatus.applicationSession 
     };
 
     applications.push(newApplication);
     writeApplications(applications);
 
-    // Mark as submitted for the current session
+ 
     req.session.hasSubmitted = true;
     res.redirect('/apply-staff?success=Application submitted successfully.');
 });
 
 
-// Route to get a specific application by ID (for modal)
 app.get('/view-application/:id', (req, res) => {
     const applications = readApplications();
     const application = applications.find(app => app.id === req.params.id);
 
     if (application) {
-        // Mark as read when an admin views it
+
         application.read = true;
         writeApplications(applications);
         res.json(application);
@@ -241,45 +275,44 @@ app.get('/view-application/:id', (req, res) => {
 
 app.get('/online-users', (req, res) => {
     const users = readUsers();
-    const onlineUsers = users.filter(user => user.isOnline); // Ensure you have 'isOnline' field
+    const onlineUsers = users.filter(user => user.isOnline); 
     res.json(onlineUsers);
 });
 
 
-// Registration route
+
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
     const users = readUsers();
     const existingUser = users.find(user => user.username === username);
     
     if (existingUser) {
-        return res.status(400).send('User already exists');
+
+        return res.redirect('/register?error=true');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const currentDate = new Date(); // Capture the current date as the registration date
+    const currentDate = new Date(); 
 
-    // Add `registeredDate` to the user object
+
     users.push({
         username,
         password: hashedPassword,
-        lastUpdated: currentDate.toISOString(), // For consistency, storing as an ISO string
-        registeredDate: currentDate.toISOString(), // Store as ISO string
+        lastUpdated: currentDate.toISOString(),
+        registeredDate: currentDate.toISOString(),
         role: 'user',
         isOnline: false
     });
-    
 
     writeUsers(users);
-    res.redirect('/login.html');
+    res.redirect('/login'); 
 });
 
 
-// Login route
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    // Admin login check
+
     if (username === 'Admin' && password === 'FusionNetwork') {
         req.session.user = username;
         req.session.role = 'admin';
@@ -291,14 +324,14 @@ app.post('/login', async (req, res) => {
             writeUsers(users);
         }
 
-        return res.redirect('/index.html');
+        return res.redirect('/home');
     }
 
-    // Regular user login check
     const users = readUsers();
     const user = users.find(user => user.username === username);
     if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(400).send('Invalid username or password');
+ 
+        return res.redirect('/login?error=true');
     }
 
     req.session.user = user.username;
@@ -309,56 +342,56 @@ app.post('/login', async (req, res) => {
     const applications = readApplications();
     req.session.hasSubmitted = applications.some(app => app.username === user.username);
 
-    res.redirect('/index.html');
+    res.redirect('/home');
 });
 
-app.get('/profilepage.html', (req, res) => {
+app.get('/profilepage', (req, res) => {
     if (req.session.role === 'admin') {
         return res.redirect('/admin');
     } else if (req.session.role === 'moderator') {
         return res.redirect('/moderator');
     } else if (req.session.user) {
-        // Load application data and get the user's application status
+
         const applications = readApplications();
         const userApplication = applications.find(app => app.username === req.session.user);
         const applicationStatus = userApplication ? userApplication.status : null;
 
-        // Read user data
+
         const users = readUsers();
         const userData = users.find(u => u.username === req.session.user);
 
-        // Parse the registeredDate string into a Date object
+
         const registeredDate = userData ? new Date(userData.registeredDate) : null;
 
         res.render('profilepage', { 
             user: req.session.user, 
             role: req.session.role, 
-            applicationStatus, // Pass the application status to the view
-            registeredDate, // Pass the parsed Date object
+            applicationStatus, 
+            registeredDate, 
             message: null 
         });
     } else {
-        res.redirect('/login.html');
+        res.redirect('/login');
     }
 });
 
 
 
 
-// Logout route
+
 app.get('/logout', (req, res) => {
     const users = readUsers();
 
-    // Find the user based on the session and set their online status to false
+
     const userToLogout = users.find(user => user.username === req.session.user);
     if (userToLogout) {
-        userToLogout.isOnline = false; // Set isOnline to false
+        userToLogout.isOnline = false; 
         writeUsers(users); // Update the users file
     }
 
     // Destroy the session and redirect to the login page
     req.session.destroy(() => {
-        res.redirect('/login.html'); // Redirect to login page after logging out
+        res.redirect('/login'); // Redirect to login page after logging out
     });
 });
 
@@ -709,7 +742,7 @@ app.get('/admin', (req, res) => {
     if (req.session.role === 'admin') {
         res.render('admin', { message: '', user: req.session.user }); // Adjusted line
     } else {
-        res.redirect('/login.html'); // Redirect to login if not admin
+        res.redirect('/login'); // Redirect to login if not admin
     }
 });
 
@@ -742,7 +775,7 @@ app.get('/moderator', (req, res) => {
         const user = req.session.user; // Adjust if `user` is stored elsewhere
         res.render('moderator', { user });
     } else {
-        res.redirect('/login.html');
+        res.redirect('/login');
     }
 });
 
@@ -878,6 +911,7 @@ app.post('/admin-applications/accept', (req, res) => {
         res.status(500).send('An error occurred while processing the application.');
     }
 });
+
 
 
 // Start servers
