@@ -93,36 +93,69 @@ const statusFilePath = path.join(__dirname, 'status.json'); // Add this with oth
 // Function to read the staff application status from JSON file
 const readStatus = () => {
     if (!fs.existsSync(statusFilePath)) {
-        fs.writeFileSync(statusFilePath, JSON.stringify({ staffApplicationsOpen: true })); // Default to open
+        fs.writeFileSync(statusFilePath, JSON.stringify({ staffApplicationsOpen: true, applicationSession: 1 }));
     }
     const data = fs.readFileSync(statusFilePath);
-    return JSON.parse(data).staffApplicationsOpen;
+    return JSON.parse(data);
 };
 
 // Function to write the staff application status to the JSON file
 const writeStatus = (isOpen) => {
-    fs.writeFileSync(statusFilePath, JSON.stringify({ staffApplicationsOpen: isOpen }));
+    const currentStatus = readStatus();
+    const newSession = isOpen ? currentStatus.applicationSession + 1 : currentStatus.applicationSession;
+    fs.writeFileSync(statusFilePath, JSON.stringify({ staffApplicationsOpen: isOpen, applicationSession: newSession }));
 };
 
 
-
-// Route to render the apply for staff page with status check
 app.get('/apply-staff', (req, res) => {
+    const currentStatus = readStatus();
     const hasSubmitted = req.session.hasSubmitted || false;
     const success = req.query.success ? req.query.success : null;
     const error = req.query.error ? req.query.error : null;
-    const staffApplicationsOpen = readStatus(); // Get the current status
+    const staffApplicationsOpen = currentStatus.staffApplicationsOpen;
+
+    // Check if user has applied in the current session
+    const applications = readApplications();
+    const userApplication = applications.find(app => app.username === req.session.user && app.session === currentStatus.applicationSession);
+
+    // If no application found in the current session, allow the user to reapply
+    if (!userApplication) {
+        req.session.hasSubmitted = false;
+    }
 
     res.render('apply-staff', {
         user: req.session.user,
-        hasSubmitted,
+        hasSubmitted: req.session.hasSubmitted,
         success,
         error,
-        staffApplicationsOpen // Pass this to the view
+        staffApplicationsOpen
     });
 });
 
-// Admin route to close staff applications
+
+app.post('/apply-staff', async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        // Ensure user has not already applied
+        if (req.session.hasSubmitted) {
+            return res.redirect('/apply-staff?error=You have already applied.');
+        }
+
+        // Update or set the application status to 'waiting'
+        await User.updateOne({ _id: userId }, { applicationStatus: 'waiting' });
+
+        // Set session variable to prevent re-application
+        req.session.hasSubmitted = true;
+
+        res.redirect('/profile/' + userId + '?success=Application submitted successfully');
+    } catch (error) {
+        console.error('Error updating application status to waiting:', error);
+        res.redirect('/apply-staff?error=An error occurred while submitting the application.');
+    }
+});
+
+
 app.post('/close-staff-applications', (req, res) => {
     if (req.session.role === 'admin') {
         writeStatus(false); // Close applications
@@ -132,15 +165,16 @@ app.post('/close-staff-applications', (req, res) => {
     }
 });
 
-// Admin route to open staff applications
 app.post('/open-staff-applications', (req, res) => {
     if (req.session.role === 'admin') {
-        writeStatus(true); // Open applications
+        writeStatus(true); // Open applications and increment the session
+        req.session.hasSubmitted = false; // Reset session submission flag
         res.json({ success: true });
     } else {
         res.status(403).json({ success: false });
     }
 });
+
 // Route to reset staff applications
 app.post('/reset-staff-applications', (req, res) => {
     if (req.session.role === 'admin') {
@@ -153,47 +187,41 @@ app.post('/reset-staff-applications', (req, res) => {
 
 
 
-// Route to submit a new staff application
 app.post('/submit-application', (req, res) => {
     if (!req.session.user) {
         return res.redirect('/apply-staff?error=You must be logged in to apply for staff.');
     }
 
     const applications = readApplications();
-    const existingApplication = applications.find(app => app.username === req.session.user);
+    const currentStatus = readStatus();
+    const existingApplication = applications.find(app => app.username === req.session.user && app.session === currentStatus.applicationSession);
 
+    // Check if the user has already submitted an application for the current session
     if (existingApplication) {
-        return res.redirect('/apply-staff?error=You have already submitted a staff application.');
+        return res.redirect('/apply-staff?error=You have already submitted a staff application. Please wait for a response.');
     }
 
     const newApplication = {
-        id: String(Date.now()), // Use timestamp as ID
+        id: String(Date.now()),
         username: req.session.user,
         inGameName: req.body.inGameName,
         why: req.body.why,
         scenario: req.body.scenario,
         availability: req.body.availability,
         experience: req.body.experience,
-        read: false // Default to unread
+        read: false,
+        status: 'pending',
+        session: currentStatus.applicationSession // Save the current session with the application
     };
 
     applications.push(newApplication);
     writeApplications(applications);
 
-    // Mark application as submitted
-    req.session.hasSubmitted = true; // Set session variable to indicate submission
-    res.redirect('/apply-staff?success=Application submitted successfully.'); // Redirect with success message
+    // Mark as submitted for the current session
+    req.session.hasSubmitted = true;
+    res.redirect('/apply-staff?success=Application submitted successfully.');
 });
 
-// Route for admins to view applications
-app.get('/admin-applications', (req, res) => {
-    if (req.session.role !== 'admin') {
-        return res.status(403).send('You are not authorized to view this page.');
-    }
-
-    const applications = readApplications();
-    res.render('admin-applications', { applications });
-});
 
 // Route to get a specific application by ID (for modal)
 app.get('/view-application/:id', (req, res) => {
@@ -229,7 +257,19 @@ app.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    users.push({ username, password: hashedPassword, lastUpdated: new Date(), role: 'user', isOnline: false }); // Default role is 'user' and isOnline is false
+    const currentDate = new Date(); // Capture the current date as the registration date
+
+    // Add `registeredDate` to the user object
+    users.push({
+        username,
+        password: hashedPassword,
+        lastUpdated: currentDate.toISOString(), // For consistency, storing as an ISO string
+        registeredDate: currentDate.toISOString(), // Store as ISO string
+        role: 'user',
+        isOnline: false
+    });
+    
+
     writeUsers(users);
     res.redirect('/login.html');
 });
@@ -272,18 +312,36 @@ app.post('/login', async (req, res) => {
     res.redirect('/index.html');
 });
 
-// Profile page route
 app.get('/profilepage.html', (req, res) => {
     if (req.session.role === 'admin') {
-        return res.redirect('/admin'); // Redirect to admin page if user is an admin
+        return res.redirect('/admin');
     } else if (req.session.role === 'moderator') {
-        return res.redirect('/moderator'); // Redirect to moderator page if user is a moderator
+        return res.redirect('/moderator');
     } else if (req.session.user) {
-        res.render('profilepage', { user: req.session.user, role: req.session.role, message: null });
+        // Load application data and get the user's application status
+        const applications = readApplications();
+        const userApplication = applications.find(app => app.username === req.session.user);
+        const applicationStatus = userApplication ? userApplication.status : null;
+
+        // Read user data
+        const users = readUsers();
+        const userData = users.find(u => u.username === req.session.user);
+
+        // Parse the registeredDate string into a Date object
+        const registeredDate = userData ? new Date(userData.registeredDate) : null;
+
+        res.render('profilepage', { 
+            user: req.session.user, 
+            role: req.session.role, 
+            applicationStatus, // Pass the application status to the view
+            registeredDate, // Pass the parsed Date object
+            message: null 
+        });
     } else {
-        res.redirect('/login.html'); // If no user is logged in, redirect to login
+        res.redirect('/login.html');
     }
 });
+
 
 
 
@@ -396,15 +454,23 @@ function isUserTimedOut(req) {
 }
 
 
-// Route to update application status
+// Update application status route
 app.post('/applications/:id/status', (req, res) => {
     const { id } = req.params;
-    const { status } = req.body; // "approved" or "rejected"
-    // Update the application status in your database or data source here
-    // For example:
-    applications[id].status = status;
-    res.sendStatus(200); // Send a response back to the client
+    const { status } = req.body; // Expected values: "approved" or "rejected"
+
+    const applications = readApplications(); // Load applications data
+    const applicationIndex = applications.findIndex(app => app.id === id);
+
+    if (applicationIndex !== -1) {
+        applications[applicationIndex].status = status; // Update the status
+        writeApplications(applications); // Save the updated data back to JSON
+        res.sendStatus(200); // Success response
+    } else {
+        res.status(404).send('Application not found.'); // Handle case if application is missing
+    }
 });
+
 
 // Define an array of bad words
 const badWords = ['fuck','FUCK','4r5e', '5h1t','5hit', 'a55', 'anal', 'anus', 'ar5e', 'arrse', 'arse', 'ass', 'ass-fucker', 'asses', 'assfucker', 'assfukka', 'asshole', 'assholes', 'asswhole', 'a_s_s', 'b!tch', 'b00bs', 'b17ch', 'b1tch', 'ballbag', 'balls', 'ballsack', 'bastard', 'beastial', 'beastiality', 'bellend', 'bestial', 'bestiality', 'bi+ch', 'biatch', 'bitch', 'bitcher', 'bitchers', 'bitches', 'bitchin', 'bitching', 'bloody', 'blow job', 'blowjob', 'blowjobs', 'boiolas', 'bollock', 'bollok', 'boner', 'boob', 'boobs', 'booobs', 'boooobs', 'booooobs', 'booooooobs', 'breasts', 'buceta', 'bugger', 'bum', 'bunny fucker', 'butt', 'butthole', 'buttmuch', 'buttplug', 'c0ck', 'c0cksucker', 'carpet muncher', 'cawk', 'chink', 'cipa', 'cl1t', 'clit', 'clitoris', 'clits', 'cnut', 'cock', 'cock-sucker', 'cockface', 'cockhead', 'cockmunch', 'cockmuncher', 'cocks', 'cocksuck', 'cocksucked', 'cocksucker', 'cocksucking', 'cocksucks', 'cocksuka', 'cocksukka', 'cok', 'cokmuncher', 'coksucka', 'coon', 'cox', 'crap', 'cum', 'cummer', 'cumming', 'cums', 'cumshot', 'cunilingus', 'cunillingus', 'cunnilingus', 'cunt', 'cuntlick', 'cuntlicker', 'cuntlicking', 'cunts', 'cyalis', 'cyberfuc', 'cyberfuck', 'cyberfucked', 'cyberfucker', 'cyberfuckers', 'cyberfucking', 'd1ck', 'damn', 'dick', 'dickhead', 'dildo', 'dildos', 'dink', 'dinks', 'dirsa', 'dlck', 'dog-fucker', 'doggin', 'dogging', 'donkeyribber', 'doosh', 'duche', 'dyke', 'ejaculate', 'ejaculated', 'ejaculates', 'ejaculating', 'ejaculatings', 'ejaculation', 'ejakulate', 'f u c k', 'f u c k e r', 'f4nny', 'fag', 'fagging', 'faggitt', 'faggot', 'faggs', 'fagot', 'fagot', 'fags', 'fanny', 'fannyflaps', 'fannyfucker', 'fanyy', 'fatass', 'fcuk', 'fcuker', 'fcuking', 'feck', 'fecker', 'felching', 'fellate', 'fellatio', 'fingerfuck', 'fingerfucked', 'fingerfucker', 'fingerfuckers', 'fingerfucking', 'fingerfucks', 'fistfuck', 'fistfucked', 'shag', 'shagger', 'shaggin', 'shagging', 'shemale', 'shi+', 'shit', 'shitdick', 'shite', 'nigger', 'niger', 'nigga', 'n1ga', 'n1gga','NIGGER', 'NIGGA', ]; // Add more words as needed
@@ -583,14 +649,15 @@ app.delete('/delete-forum/:id', (req, res) => {
     const { id } = req.params;
     const forums = readForums();
     
-    // Check if the user is an admin or the creator of the forum
+    // Find the forum to delete
     const forumToDelete = forums.find(forum => forum.id === id);
     
     if (forumToDelete) {
-        if (req.session.role === 'admin' || forumToDelete.username === req.session.user) {
+        // Allow admins, moderators, or the forum creator to delete the forum
+        if (req.session.role === 'admin' || req.session.role === 'moderator' || forumToDelete.username === req.session.user) {
             const updatedForums = forums.filter(forum => forum.id !== id);
             writeForums(updatedForums);
-            return res.status(200).send('Forum deleted successfully'); // Send success response
+            return res.status(200).send('Forum deleted successfully'); // Success response
         } else {
             return res.status(403).send('Unauthorized to delete this forum'); // Unauthorized
         }
@@ -598,6 +665,7 @@ app.delete('/delete-forum/:id', (req, res) => {
         return res.status(404).send('Forum not found'); // Not found
     }
 });
+
 
 // Route for editing an announcement
 app.get('/edit-announcement/:id', (req, res) => {
@@ -762,6 +830,55 @@ app.post('/reset-password', async (req, res) => {
     // Redirect with a success message
     res.redirect('/admin?message=' + encodeURIComponent('Password successfully reset.'));
 });
+
+app.get('/admin-applications', (req, res) => {
+    if (req.session.role !== 'admin') {
+        return res.status(403).send('You are not authorized to view this page.');
+    }
+
+    const applications = readApplications();
+    res.render('admin-applications', { applications });
+});
+
+
+app.post('/admin-applications/deny', (req, res) => {
+    try {
+        const { userId } = req.body;
+        const applications = readApplications();
+        const applicationIndex = applications.findIndex(app => app.id === userId);
+
+        if (applicationIndex !== -1) {
+            applications[applicationIndex].status = 'denied'; // Set status to denied
+            writeApplications(applications);
+            res.redirect('/admin-applications');
+        } else {
+            res.status(404).send('Application not found.');
+        }
+    } catch (error) {
+        console.error('Error updating application status to denied:', error);
+        res.status(500).send('An error occurred while processing the application.');
+    }
+});
+
+app.post('/admin-applications/accept', (req, res) => {
+    try {
+        const { userId } = req.body;
+        const applications = readApplications();
+        const applicationIndex = applications.findIndex(app => app.id === userId);
+
+        if (applicationIndex !== -1) {
+            applications[applicationIndex].status = 'approved'; // Set status to approved
+            writeApplications(applications);
+            res.redirect('/admin-applications');
+        } else {
+            res.status(404).send('Application not found.');
+        }
+    } catch (error) {
+        console.error('Error updating application status to accepted:', error);
+        res.status(500).send('An error occurred while processing the application.');
+    }
+});
+
 
 // Start servers
 app.listen(PORT, () => {
