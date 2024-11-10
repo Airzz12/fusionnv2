@@ -1,0 +1,203 @@
+.appImage {
+	opacity: 0;
+	animation: fade-in-bottom 1s;
+}
+
+.appsContainer {
+	top: 65px;
+	position: absolute;
+	width: 1070px;
+	display: inline-flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	gap: 20px;
+	justify-content: flex-start;
+}
+
+.appsContainer img {
+	width: 198px;
+	height: 128px;
+	object-fit: cover;
+	border-radius: 14px;
+	cursor: pointer;
+	transition: 0.2s ease-in-out !important;
+}
+
+.appsContainer img:hover {
+	transform: scale(1.05);
+	transition: 0.2s ease-in-out !important;
+}
+
+.appsContainer img:active {
+	transition: 0s;
+	outline: 2px solid var(--image-outline-color);
+}
+
+.gameImage {
+	opacity: 0;
+	animation: fade-in-bottom 1s;
+}
+
+.appsContainer {
+	opacity: 1;
+}
+
+.gameContain {
+	top: 65px;
+	position: absolute;
+	width: 1070px;
+	display: inline-flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	gap: 20px;
+	justify-content: flex-start;
+}
+
+.gameContain img {
+	width: 198px;
+	height: 128px;
+	object-fit: cover;
+	border-radius: 14px;
+	cursor: pointer;
+	transition: 0.2s ease-in-out !important;
+}
+
+.gameContain img:hover {
+	transform: scale(1.05);
+	transition: 0.2s ease-in-out !important;
+}
+
+.gameContain img:active {
+	transition: 0s;
+	outline: 2px solid var(--image-outline-color);
+}
+
+.scrolltop {
+	background-color: var(--scrolltop-background-color);
+	backdrop-filter: var(--scrolltop-backdrop-filter);
+	width: 49px;
+	height: 49px;
+	border-radius: 50%;
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	z-index: 9999;
+	transition: 0.3s ease-in-out all;
+	opacity: 0;
+}
+
+.scrolltop:hover {
+	transform: scale(1.1);
+}
+
+.scrolltop span.material-symbols-outlined {
+	justify-content: center;
+	transform: translateY(-10px);
+	font-size: 30px;
+}
+
+.randomBtn {
+	height: 35px;
+	padding: 0 20px;
+	text-wrap: nowrap;
+	background-color: var(--random-btn-background-color);
+	border-radius: 10px;
+	border: 0;
+	text-align: center;
+	outline: #ffffff17 1px solid;
+	user-select: none;
+	cursor: pointer;
+	margin-left: auto;
+	margin-right: auto;
+	position: absolute;
+	width: 140px;
+	margin-left: -13em;
+	font-weight: 200;
+	color: #868686;
+	font-family: 'DM Sans';
+	transition: 0.3s all ease-in-out;
+	animation: fade-in-left 1s;
+	display: flex;
+	align-items: center;
+}
+
+.randomBtn:hover {
+	background-color: var(--random-btn-hover-background-color);
+	outline: var(--border-color) 1px solid;
+}
+
+.randomBtn:active {
+	background-color: var(--random-btn-active-background-color);
+}
+
+.gameSearchInput,
+.appsSearchInput,
+#gointospace {
+	padding-left: 40px;
+}
+.store-container {
+    text-align: center;
+    margin-top: 150px;
+    position: relative;
+}
+
+.fusion-header {
+    font-size: 36px;
+    font-family: 'DM Sans', sans-serif;
+    color: #ffffff;
+    margin-bottom: 30px;
+}
+
+.gameCategories {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.gameBox {
+    width: 200px;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1c1c1e;
+    color: #ffffff;
+    font-family: 'DM Sans';
+    font-weight: 600;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+
+.fusion-header {
+    font-size: 2.5em;
+    color: white;
+    margin-bottom: 30px;
+}
+
+body {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Optional custom colors for each box */
+.lifesteal {
+    background-color: #a83432;
+}
+
+.skyblock {
+    background-color: #3a9ad9;
+}
+
+.pvp {
+    background-color: #f0ad4e;
+}
+
+.fusion {
+    background-color: #5cb85c;
+}
