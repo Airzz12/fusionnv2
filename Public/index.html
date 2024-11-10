@@ -372,6 +372,71 @@
         .staff-member h3 .role-dev { color: #00ffff; }
         .staff-member h3 .role-mod { color: #ffa500; }
         .staff-member h3 .role-admin { color: #00ff00; }
+
+        #server-status-section {
+    text-align: center;
+}
+
+.status-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.status-card {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(74, 222, 128, 0.1));
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.status-indicator, .player-count {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.status-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #808080;
+    transition: background-color 0.3s ease;
+}
+
+.status-indicator.online .status-icon {
+    background-color: #4ade80;
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+}
+
+.status-indicator.offline .status-icon {
+    background-color: #ef4444;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.status-text, .count-text {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.player-count svg {
+    margin-right: 0.25rem;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.status-indicator.online .status-icon,
+.status-indicator.offline .status-icon {
+    animation: pulse 2s infinite;
+}
     </style>
 </head>
   <meta name="description" content="Join the Fusion Network, the ultimate Minecraft server experience with custom biomes, quests, and a vibrant community!">
@@ -443,6 +508,29 @@
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                         </svg>
                     </button>
+                </div>
+            </section>
+
+            <section id="server-status-section" class="section">
+                <h2>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" stroke="none">
+                        <path d="M21 14c0 1.1-.9 2-2 2h-1v2c0 .55-.45 1-1 1s-1-.45-1-1v-2H8v2c0 .55-.45 1-1 1s-1-.45-1-1v-2H5c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v8z"/>
+                    </svg>
+                    Server Status
+                </h2>
+                <div class="status-container">
+                    <div class="status-card">
+                        <div id="server-status" class="status-indicator">
+                            <div class="status-icon"></div>
+                            <span class="status-text">Checking...</span>
+                        </div>
+                        <div id="player-count" class="player-count">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" stroke="none">
+                                <path d="M16 17v2H2v-2s0-4 7-4 7 4 7 4m-3.5-9.5A3.5 3.5 0 1 0 9 11a3.5 3.5 0 0 0 3.5-3.5m3.44 5.5A5.32 5.32 0 0 1 18 17v2h4v-2s0-3.63-6.06-4M15 4a3.39 3.39 0 0 0-1.93.59 5 5 0 0 1 0 5.82A3.39 3.39 0 0 0 15 11a3.5 3.5 0 0 0 0-7z"/>
+                            </svg>
+                            <span class="count-text">-</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -605,6 +693,45 @@
         staffMembers.forEach((member, index) => {
             member.style.animationDelay = `${0.1 * index}s`;
         });
+
+        async function getServerStatus() {
+    const apiUrl = "https://api.mcstatus.io/v2/status/java/fusion-network.xyz";
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        const statusElement = document.getElementById("server-status");
+        const statusText = statusElement.querySelector(".status-text");
+        const playerCountElement = document.getElementById("player-count");
+        const countText = playerCountElement.querySelector(".count-text");
+
+        if (data.online) {
+            statusElement.classList.add("online");
+            statusElement.classList.remove("offline");
+            statusText.textContent = "Online";
+            countText.textContent = `${data.players.online} / ${data.players.max}`;
+        } else {
+            statusElement.classList.add("offline");
+            statusElement.classList.remove("online");
+            statusText.textContent = "Offline";
+            countText.textContent = "-";
+        }
+    } catch (error) {
+        console.error("Error fetching server status:", error);
+        const statusElement = document.getElementById("server-status");
+        const statusText = statusElement.querySelector(".status-text");
+        statusElement.classList.add("offline");
+        statusElement.classList.remove("online");
+        statusText.textContent = "Error";
+        document.getElementById("player-count").querySelector(".count-text").textContent = "-";
+    }
+}
+
+// Call the function when the page loads
+window.addEventListener('load', getServerStatus);
+
+// Refresh status every 5 minutes
+setInterval(getServerStatus, 180000);
     </script>
 </body>
 </html>
