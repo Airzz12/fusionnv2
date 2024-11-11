@@ -393,6 +393,19 @@
             border-color: var(--secondary);
         }
 
+        .input-note {
+        display: block;
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+
+    #mcUpdateMessage {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+
     </style>
 </head>
 <body>
@@ -423,7 +436,7 @@
             </div>  
             <div class="profile-content">
                 <div class="profile-image fade-in delay-2">
-                    <img src="https://mc-heads.net/avatar/steve/150" alt="Profile Picture">
+                    <img src="<%= user && user.minecraftUsername ? `https://mc-heads.net/avatar/${user.minecraftUsername}/150` : 'https://mc-heads.net/avatar/steve/150' %>" alt="Profile Picture" id="profilePicture">
                 </div>
                 <div class="profile-info fade-in delay-3">
                     <% if (user) { %>
@@ -443,22 +456,36 @@
                                     <div class="form-group">
                                         <button type="submit">Update Username</button>
                                     </div>
-                                    <% if (registeredDate) { %>
-                                        <p>Registered Date: <span class="bold-text"><%= registeredDate.toLocaleDateString() %></span></p>
-                                    <% } else { %>
-                                        <p>Registered Date: <span class="bold-text">Not available</span></p>
-                                    <% } %>
-
-                                    <% if (applicationStatus) { %>
-                                        <p>Application Status: 
-                                            <span class="bold-text" style="color: <%= applicationStatus === 'approved' ? 'green' : applicationStatus === 'denied' ? 'red' : 'orange' %>;">
-                                                <%= applicationStatus.charAt(0).toUpperCase() + applicationStatus.slice(1) %>
-                                            </span>
-                                        </p>
-                                    <% } else { %>
-                                        <p>Application Status: <span class="bold-text">Not applied yet.</span> <a href="/apply-staff" class="apply-link">Apply here</a></p>
-                                    <% } %>                                        
-                                </form> 
+                                </form>
+                                
+                                <h3>Update Minecraft Username</h3>
+                                <form id="updateMinecraftUsernameForm">
+                                    <div class="form-group">
+                                        <input type="text" id="minecraftUsername" name="minecraftUsername" placeholder="Minecraft Username" required />
+                                        <small class="input-note">*Enter your Minecraft username to update your profile picture</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit">Update Profile Picture</button>
+                                    </div>
+                                </form>
+                                <p id="mcUpdateMessage"></p>
+            
+                                <% if (registeredDate) { %>
+                                    <p>Registered Date: <span class="bold-text"><%= registeredDate.toLocaleDateString() %></span></p>
+                                <% } else { %>
+                                    <p>Registered Date: <span class="bold-text">Not available</span></p>
+                                <% } %>
+            
+                                <% if (applicationStatus) { %>
+                                    <p>Application Status: 
+                                        <span class="bold-text" style="color: <%= applicationStatus === 'approved' ? 'green' : applicationStatus === 'denied' ? 'red' : 'orange' %>;">
+                                            <%= applicationStatus.charAt(0).toUpperCase() + applicationStatus.slice(1) %>
+                                        </span>
+                                    </p>
+                                <% } else { %>
+                                    <p>Application Status: <span class="bold-text">Not applied yet.</span> <a href="/apply-staff" class="apply-link">Apply here</a></p>
+                                <% } %>
+                                
                                 <p id="updateMessage"></p>
                                 <a href="/logout" class="logout-btn">Logout</a>
                             </div>
@@ -520,87 +547,91 @@
         </footer>
     </div>
 
-    <!-- JavaScript -->
+  
     <script>
-        document.getElementById('updateUsernameForm').addEventListener('submit', async function (event) {
-            event.preventDefault();
-            const newUsername = document.getElementById('newUsername').value;
+document.getElementById('updateMinecraftUsernameForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const minecraftUsername = document.getElementById('minecraftUsername').value.trim();
+    const messageDiv = document.getElementById('mcUpdateMessage');
+    const profilePicture = document.getElementById('profilePicture');
 
-            try {
-                const response = await fetch('/update-username', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ newUsername })
-                });
+    if (minecraftUsername) {
+        const newAvatarUrl = `https://mc-heads.net/avatar/${minecraftUsername}/150`;
+        
+        // Update the profile picture
+        profilePicture.src = newAvatarUrl;
+        localStorage.setItem('minecraftUsername', minecraftUsername);
+        messageDiv.innerText = 'Profile picture updated successfully!';
+        messageDiv.style.color = 'green';
+    } else {
+        messageDiv.innerText = 'Please enter a valid Minecraft username.';
+        messageDiv.style.color = 'red';
+        // Keep the default picture
+        profilePicture.src = 'https://mc-heads.net/avatar/steve/150';
+        localStorage.removeItem('minecraftUsername');
+    }
+});
 
-                const result = await response.json();
-                const messageDiv = document.getElementById('updateMessage');
+// Load saved Minecraft username on page load
+window.addEventListener('load', function() {
+    const savedUsername = localStorage.getItem('minecraftUsername');
+    if (savedUsername) {
+        const profilePicture = document.getElementById('profilePicture');
+        profilePicture.src = `https://mc-heads.net/avatar/${savedUsername}/150`;
+    }
+});
 
-                if (result.success) {
-                    messageDiv.innerText = result.message;
-                    alert(result.message);
-                } else if (result.remainingTime) {
-                    startCountdown(result.remainingTime);
-                    messageDiv.innerText = result.message;
-                } else {
-                    messageDiv.innerText = result.message;
-                }
-            } catch (error) {
-                console.error('Error updating username:', error);
-            }
+// Existing updateUsernameForm event listener
+document.getElementById('updateUsernameForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const newUsername = document.getElementById('newUsername').value;
+
+    try {
+        const response = await fetch('/update-username', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ newUsername })
         });
 
-        function startCountdown(timeRemaining) {
-            const countdownDiv = document.getElementById('updateMessage');
-            let countdown = timeRemaining / 1000;
+        const result = await response.json();
+        const messageDiv = document.getElementById('updateMessage');
 
-            const interval = setInterval(() => {
-                const days = Math.floor(countdown / (60 * 60 * 24));
-                const hours = Math.floor((countdown % (60 * 60 * 24)) / (60 * 60));
-                const minutes = Math.floor((countdown % (60 * 60)) / 60);
-                const seconds = Math.floor(countdown % 60);
-
-                countdownDiv.innerText = `You can change your username in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-                countdown--;
-
-                if (countdown < 0) {
-                    clearInterval(interval);
-                    countdownDiv.innerText = '';
-                }
-            }, 1000);
+        if (result.success) {
+            messageDiv.innerText = result.message;
+            alert(result.message);
+        } else if (result.remainingTime) {
+            startCountdown(result.remainingTime);
+            messageDiv.innerText = result.message;
+        } else {
+            messageDiv.innerText = result.message;
         }
-    </script>
-    <script> 
-        const burger = document.getElementById('burger');
-        const navLinks = document.getElementById('navLinks');
-        const mainContent = document.querySelector('main');
+    } catch (error) {
+        console.error('Error updating username:', error);
+    }
+});
 
-        burger.addEventListener('click', () => {
-            navLinks.classList.toggle('show');
-            document.body.classList.toggle('menu-open');
-            burger.textContent = navLinks.classList.contains('show') ? '✕' : '☰';
-            
-            if (navLinks.classList.contains('show')) {
-                setTimeout(() => {
-                    mainContent.style.visibility = 'hidden';
-                }, 300);
-            } else {
-                mainContent.style.visibility = 'visible';
-            }
-        });
+function startCountdown(timeRemaining) {
+    const countdownDiv = document.getElementById('updateMessage');
+    let countdown = timeRemaining / 1000;
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+    const interval = setInterval(() => {
+        const days = Math.floor(countdown / (60 * 60 * 24));
+        const hours = Math.floor((countdown % (60 * 60 * 24)) / (60 * 60));
+        const minutes = Math.floor((countdown % (60 * 60)) / 60);
+        const seconds = Math.floor(countdown % 60);
+
+        countdownDiv.innerText = `You can change your username in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+        countdown--;
+
+        if (countdown < 0) {
+            clearInterval(interval);
+            countdownDiv.innerText = '';
+        }
+    }, 1000);
+}
     </script>
 </body>
 </html>
