@@ -109,6 +109,11 @@ const writeStatus = (isOpen) => {
 app.get('/home', (req, res) => {
     res.sendFile(path.join(__dirname, 'Public', 'index.html'));
   });
+
+  app.get('/news', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'news.html'));
+  });
+  
   
 
   app.get('/login', (req, res) => {
@@ -133,6 +138,10 @@ app.get('/home', (req, res) => {
 
   app.get('/mod-policy', (req, res) => {
     res.sendFile(path.join(__dirname, 'Public', 'mod-policy.html'));
+  });   
+
+  app.get('/join', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'join.html'));
   });
   
 
